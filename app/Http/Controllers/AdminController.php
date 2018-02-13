@@ -1,0 +1,199 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Auth;
+use DB;
+use App\Roles;
+use App\Client;
+use App\User;
+
+
+class AdminController extends Controller
+{
+
+
+     public function __construct() {
+     $this->middleware(['auth', 'admin']);
+       }
+
+     public function signup(Request $request)
+
+    {       
+        $input = $request->all();
+       // print_r($input);dd();
+        $this->validate(request(), [
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|min:6|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\X])(?=.*[!$#%]).*$/',
+        ]);
+
+       /* regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/*/
+        /* $user = User::create(request(['first_name', 'last_name', 'email', 'role_id', 'client_id', 'password']));*/
+        $users = new User();
+        $users->first_name = $input['first_name'];
+        $users->last_name = $input['last_name'];
+        $users->email = $input['email'];
+        $users->role_id = $input['role_id'];
+        $users->verified = 1;
+      //  $users->client_id = $input['client_id'];
+         $users->password = bcrypt($input['password']);
+        $users->save();
+
+        
+   return redirect()->route('userView');
+    }
+
+    public function userActivate(Request $request){
+
+        if(isset($request['de_activate_id'])){
+
+            $deactive = User::findOrFail($request['de_activate_id']);
+            $deactive->acount_status = 0;
+            $deactive->save();
+        }
+
+         if(isset($request['activate_id'])){
+
+            $deactive = User::findOrFail($request['activate_id']);
+            $deactive->acount_status = 1;
+            $deactive->save();
+        }
+
+              return redirect()->back()->with('deactive_message');
+
+    }
+    
+
+
+     public function addUsers(){
+        $roles = Roles::get();
+        $client = Client::get();
+        return view('users.create', compact('roles', 'client'));
+    }
+
+     public function userView(){
+        $id = Auth::user()->client_id;
+        //echo $id;
+        $user = User::with('roles')/*->where('users.client_id', '=', $id)*/->get();
+        //DB::table('users')->select('users.*', 'roles.*')->join('roles', 'roles.id', '=', 'users.role_id')->get();
+      //  print_r($user);dd();
+        return view('users.view', compact('user'));
+    }
+
+
+    public function getUsers(){
+
+        $client = Client::with('user')->get()->toArray();
+ //echo "<pre>";       
+//dd($client);
+       return $client;
+        
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id){
+
+        $user = User::find($id);
+
+        //DB::table('users')->select('users.*')->where('users.id', '=', $id)->get();
+     
+        return view('users.edit', compact('user'));
+    }
+
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+   public function update(Request $request, $id){
+         $user = User::findOrFail($id);
+
+          $this->validate($request, [
+            'first_name'=>'required|max:120',
+            'last_name'=>'required|max:120',
+            'email'=>'required|email|unique:users,email,'.$id,
+            'password'=>'required|min:6|confirmed'
+        ]);
+
+            $input = $request->only(['first_name', 'last_name', 'email', 'password']);
+
+            $user->fill($input)->save();
+
+           return redirect()->route('userView')
+            ->with('flash_message',
+             'User Edit successfully edited.');
+    }
+
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request)
+    {
+
+       // print_r($request->all());dd();
+
+         $delUser = User::findOrFail($request['id']);
+         $delUser->delete();
+
+         \Session::flash('flash_message_delete','User successfully deleted.');
+ 
+         return redirect()->back();
+    }
+}
