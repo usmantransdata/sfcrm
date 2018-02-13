@@ -18,7 +18,8 @@
 								
 							</h1>
 					</div><!-- /.page-header -->
-
+<form class="form-horizontal" method="POST" action="{{route('readcsv')}}" enctype="multipart/form-data" >
+	{{ csrf_field() }}
 						<div class="row">
 							<div class="col-xs-12">
 								<div class="container">
@@ -71,7 +72,7 @@
 			                   <div class="panel-heading">CSV Import</div>
 
 			                   <div class="panel-body">
-		<form class="form-horizontal" method="POST" action="{{route('import_parse')}}" >
+		
 			                           {{ csrf_field() }}
 
 			                           <div class="form-group{{ $errors->has('csv_file') ? ' has-error' : '' }}">
@@ -137,6 +138,7 @@
 							<!-- multi step wizard form ends here -->
 							</div> <!-- /.col xs-12 -->
 						</div><!-- /.row -->
+					</form>	
 					</div><!-- /.page-content-area -->
 				</div><!-- /.page-content -->
 			</div><!-- /.main-container -->

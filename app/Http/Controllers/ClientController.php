@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests;
+
 use App\Http\Requests\CsvImportRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
@@ -11,6 +11,7 @@ use App\Client;
 use App\User;
 use App\OrderBatch;
 use App\BatchDetail;
+use App\CotentBatch;
 use App\CompanyManager;
 use Excel;
 use Session;  
@@ -24,7 +25,7 @@ class ClientController extends Controller
 {
 
  public function __construct() {
-     $this->middleware(['auth', 'admin']);
+    //s$this->middleware(['auth', 'client']);
        }
       
 
@@ -46,6 +47,41 @@ class ClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function readcsv(Request $request)
+    {
+    $path = $request->file('csv_file')->getRealPath();
+    
+
+    if ($request->has('header')) {
+        $data = Excel::load($path, function($reader) {})->get()->toArray();
+    } else {
+        $data = array_map('str_getcsv', file($path));
+    }
+    //print_r($request->has('header'));
+    $contentbatch = new CotentBatch;
+    $tablecolums = $contentbatch->getTableColumns();
+    //print_r($tablecolums);
+    
+   $csv_header_fields=array_keys($data[0]);
+    //print_r(array_keys($data[0]));
+//print_r(sizeof($data));
+   
+    if (sizeof($data) > 0) {
+        if ($request->has('header')) {
+            $csv_header_fields = [];
+            foreach ($data[0] as $key => $value) {
+                $csv_header_fields[] = $key;
+            }
+        }
+        $csv_data = $data;
+      
+     //print_r(($data));   
+    } else {
+        return redirect()->back();
+    }
+ //dd();
+    return view('data.choose_fields', compact( 'csv_header_fields', 'csv_data', 'tablecolums'));
+    }
     public function store(Request $request)
     {
         $input = $request->all();
@@ -298,7 +334,8 @@ public function parseImport(CsvImportRequest $request)
     public function importExcel(Request $request)
     {  
 
-           
+           echo "sdasd";
+           dd();
               $cols = array();
              $input = $request->all();
                  //  print_r(Input::get('company'));dd();

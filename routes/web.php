@@ -22,13 +22,14 @@ Route::group(['middleware' => 'auth'], function () {
 Route::post('userActivate', 'AdminController@userActivate')->name('userActivate');	
 
 
-Route::post('/import_parse', 'ClientController@parseImport')->name('import_parse');
-//Route::post('/import_process', 'ClientController@processImport')->name('import_process');
+Route::post('import_parse', 'ClientController@parseImport')->name('import_parse');
+Route::post('import_process', 'ClientController@processImport')->name('import_process');
 
 
 Route::post('user_signup', 'AdminController@signup')->name('user_signup');
 
 Route::get('backend', 'HomeController@index')->name('backend');
+Route::post('readcsv', 'ClientController@readcsv')->name('readcsv');
 
 Route::get('user', 'AdminController@addUsers')->name('user');
 
