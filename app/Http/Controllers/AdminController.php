@@ -14,9 +14,6 @@ class AdminController extends Controller
 {
 
 
-     public function __construct() {
-     $this->middleware(['auth', 'admin']);
-       }
 
      public function signup(Request $request)
 
@@ -48,6 +45,7 @@ class AdminController extends Controller
 
     public function userActivate(Request $request){
 
+      //  print_r($request->all());dd();
         if(isset($request['de_activate_id'])){
 
             $deactive = User::findOrFail($request['de_activate_id']);
@@ -56,7 +54,7 @@ class AdminController extends Controller
         }
 
          if(isset($request['activate_id'])){
-
+           // print_r($request['activate_id']);dd();
             $deactive = User::findOrFail($request['activate_id']);
             $deactive->acount_status = 1;
             $deactive->save();

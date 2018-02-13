@@ -13,9 +13,6 @@ use Auth;
 class BatchDetailController extends Controller
 {
 
-      public function __construct() {
-     $this->middleware(['auth', 'manager']);
-       }
     /**
      * Display a listing of the resource.
      *

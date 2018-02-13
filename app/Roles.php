@@ -11,7 +11,7 @@ class Roles extends Model
   	use Notifiable;
   
 
-    protected $table = 'roles';
+    protected $table = 'users_roles';
     /**
      * The attributes that are mass assignable.
      *

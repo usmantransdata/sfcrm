@@ -3,6 +3,8 @@
   @include('layouts.header')
   @include('layouts.sidebar')
 
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+
   <body class="no-skin">
           <div class="main-container" id="main-container">
             <script type="text/javascript">
@@ -13,15 +15,17 @@
                   <div class="page-header">
                     <h1>
                       Users List
-                      <small>
-                        <i class="ace-icon fa fa-angle-double-right"></i>
-                        overview &amp; stats
-                      </small>
                     </h1>
                   </div><!-- /.page-header -->
                    @if (session('flash_message'))
                       <div class="alert alert-success">
                           {{ session('flash_message') }}
+                      </div>
+              @endif   
+
+                @if (session('deactive_message'))
+                      <div class="alert alert-success">
+                          {{ session('deactive_message') }}
                       </div>
               @endif   
                     <div class="main-content">
@@ -50,13 +54,9 @@
                                  
                                 </label>
                               </th>
-                             <th>First Name</th>
-                             <th>Last Name</th>
+                             <th>Name</th>
                              <th>Email</th>
-                              <th>User Type</th>
-                              <th>Verified</th>
-                              <th>Created_at</th>
-                               <th>Acount Status</th>
+                              <th>User Type</th>   
                               <th>Change Status</th>
                                 <th>Action</th>
                               </tr>
@@ -78,38 +78,27 @@
                                 </label>
                               </td>
 
-                            <td>{{ $users->first_name }}</td>
-                            <td>{{ $users->last_name }}</td>
+                            <td>{{ ucwords($users->first_name) }} {{ ucwords($users->last_name) }}</td>
                             <td>{{ $users->email  }}</td>
                            
                             <td>{{$users->roles->role}}</td>
-                            @if($users->verified == 1)
-                            <td class="text-success">Verified</td>
-                            @else
-                             <td class="text-danger">Un-Verified</td>
-                            @endif
-                             <td>{{ $users->created_at }}</td>
 
-                           
-                             @if($users->acount_status == 1)
-                            <td class="text-success">Active</td>
-                            @else
-                             <td class="text-danger">De-Active</td>
-                            @endif
                             @if($users->acount_status == 0)
+
                             <td>
                                <center>
-                             <a data-toggle="modal" data-id="{{$users->id}}" data-target="#userActivate" style="cursor: pointer;">
-                              <i class="fa fa-check" aria-hidden="true"></i>
-                            </a>
+
+                                 <input type="checkbox" data-toggle="toggle" data-on="Enabled" data-off="Disabled" data-width="100" data-height="10" class="switchToggle" data-id="{{$users->id}}">
+                        
+                 
                           </center>
                           </td>
                           @else
                              <td>
                               <center>
-                             <a data-toggle="modal" data-id="{{$users->id}}" data-target="#userDeactivate" style="cursor: pointer;">
-                              <i class="fa fa-times" aria-hidden="true"></i>
-                            </a>
+
+                                <input type="checkbox" data-toggle="toggle" data-on="Enabled" data-off="Disabled" data-width="100" data-height="10" class="switchToggle" data-id="{{$users->id}}" checked>
+                          
                             </center>
                           </td>
                           
@@ -175,16 +164,14 @@
 
              <div id="userActivate" class="modal fade" role="dialog">
               <div class="modal-dialog">
-
                 <!-- Modal content-->
                 <div class="modal-content">
-                
                   <form action="{{route('userActivate')}}" method="post" >
                     {{csrf_field()}}
                   <div class="modal-body">
                    <span  class="text-primary"><h3>
                    Are you sure you want to <span class="text-success">activate</span> this user ?</h3></span></a></a>
-                    <input type="hidden" name="activate_id" value="" class="active_id">
+                    <input type="hidden" name="activate_id" value="" id="enable" class="active_id">
                   </div>
                
                   <div class="modal-footer">
@@ -194,9 +181,7 @@
 
                     </form>
                 </div>
-
-
-              </div>
+               </div>
             </div> 
 <!-- user deactivate -->
 
@@ -211,7 +196,7 @@
                   <div class="modal-body">
                    <span  class="text-primary"><h3>
                    Are you sure you want to <span class="text-danger">de-activate</span> this user ?</h3></span></a></a>
-                    <input type="hidden" name="de_activate_id" value="" class="deActive_id">
+                    <input type="hidden" name="de_activate_id" id="disable" value="" class="deActive_id">
                   </div>
                
                   <div class="modal-footer">
@@ -231,9 +216,28 @@
  <script src="{{ asset('/') }}public/aceadmin/assets/js/jquery.dataTables.min.js"></script>
     <script src="{{ asset('/') }}public/aceadmin/assets/js/jquery.dataTables.bootstrap.js"></script>
 
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
    <!--  <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script> -->
 
 <script >
+
+  $('.switchToggle').on('change', function(){
+     var value = this.checked;
+     var id =  $(this).data("id");
+         
+      
+      if(value == true){
+     // alert();
+          $('#userActivate').modal('show'); 
+          $(".modal-body #enable").val( id );
+        
+      }else
+      {
+          $('#userDeactivate').modal('show'); 
+          $(".modal-body #disable").val( id );
+      }
+    });
 
    $('#myModal').on('show.bs.modal', function (e) {
   var id = $(e.relatedTarget).data('id');

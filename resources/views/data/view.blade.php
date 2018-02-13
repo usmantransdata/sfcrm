@@ -155,16 +155,15 @@
 
                              @if($data->batchStatus->status == 'Submited')
                             <td>
-                             
                             </td>
-                            
                             @endif
-
                               @if($data->batchStatus->status == 'In-Process')
                             <td>
-                             
                             </td>
-                            
+                            @endif
+                            @if($data->batchStatus->status == 'QA-Review')
+                            <td>
+                            </td>
                             @endif
 
                              @if($data->batchStatus->status == 'Completed')

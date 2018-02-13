@@ -44,6 +44,8 @@ Route::post('importExcel', 'ClientController@importExcel')->name('importExcel');
 
 Route::resource('client', 'ClientController');
 
+Route::get('clientFullView/{id}', 'ClientController@clientFullView')->name('clientFullView');
+
 Route::get('getUsers' , 'AdminController@getUsers')->name('getUsers');
 
 Route::get('viewData' , 'BatchDetailController@index')->name('viewData');

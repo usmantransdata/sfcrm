@@ -11,11 +11,7 @@
                 <div class="page-content-area">
                   <div class="page-header">
                     <h1>
-                      Clients List
-                      <small>
-                        <i class="ace-icon fa fa-angle-double-right"></i>
-                        overview &amp; stats
-                      </small>
+                      Manage Clients
                     </h1>
                   </div><!-- /.page-header -->
                    @if (session('flash_message'))
@@ -54,13 +50,12 @@
                                  
                                 </label>
                               </th>
-                             <th>Company</th>
-                             <th>First Name</th>
-                             <th>Last Name</th>
+                            <!--  <th>Company</th> -->
+                             <th>Name</th>
                              <th>Email</th>
                              <th>Phone Number</th>
-                             <th>Address</th>
-                              <th>Created_at</th>
+                           <!--   <th>Address</th>
+                              <th>Created_at</th> -->
                               <th>Manager</th>
                               <th>Assign</th>
                               <th>Action</th>
@@ -82,13 +77,12 @@
                                 </label>
                               </td>
 
-                            <td>{{ $users->organization_name }}</td>
-                            <td>{{ $users->contact_first_name }}</td>
-                            <td>{{ $users->contact_last_name }}</td>
+                           <!--  <td>{{ $users->organization_name }}</td> -->
+                            <td>{{ ucwords($users->contact_first_name)}} {{ucwords($users->contact_last_name) }}</td>
                             <td>{{ $users->contact_person_email  }}</td>
                             <td>{{ $users->contact__person_phoneNumber }}</td>
-                            <td>{{ $users->country}}</td>
-                             <td>{{ $users->created_at }}</td>
+                           <!--  <td>{{ $users->country}}</td>
+                             <td>{{ $users->created_at }}</td> -->
                              @if( ! empty($users->CompanyManager->user_id))
                               <?php
                            $manager = App\User::where('id', '=', $users->CompanyManager->user_id)->get();
@@ -98,7 +92,14 @@
                               <td class="text-danger">Not Assigned</td>
                               @endif
                              <td><a href="#" class="identifyingClass" data-id="{{$users->id}}" style="cursor: pointer;" data-toggle="modal" data-target="#assignCompany">Assign</td>
-                            <td></td>
+                            <td>
+                                
+                              <center>
+                                <a href="{{route('clientFullView' , $users->id)}}" >
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                </a>
+                              </center>
+                            </td>
                         </tr>
                          @endforeach    
                       </tbody>

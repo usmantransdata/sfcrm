@@ -19,15 +19,12 @@ use DB;
 use Mail;
 use App\Mail\VerifyMail;
 use App\VerifyUser;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class ClientController extends Controller
 {
-
- public function __construct() {
-     $this->middleware(['auth', 'admin']);
-       }
       
-
     /**
      * Display a listing of the resource.
      *
@@ -49,7 +46,7 @@ class ClientController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-     //  print_r($input['manager_name']);dd();
+     // print_r($input);dd();
        
         $validatoin =  $this->validate($request,[
           'organization_name' => 'required|string|max:255|unique:client',
@@ -57,7 +54,7 @@ class ClientController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             //'phone_number' => 'required|regex:/(01)[0-9]{9}'
-            'phone_number' => 'required|numeric|size:11/'
+            'phone_number' => 'required|regex:/(01)[0-9]{9}/'
 
           ]); 
 
@@ -93,6 +90,19 @@ class ClientController extends Controller
             'user_id' => $input['manager_name'],
             'client_id' => $client->id,
         ]);
+
+          if(isset($input['switch-field-1'])){
+            if($input['switch-field-1'] == 'on'){
+             // echo "string";dd();
+            $enableUser = User::findOrFail($user->id);
+            $enableUser->acount_status = 1;
+            $enableUser->save();
+              }else{
+                  $enableUser = User::findOrFail($user->id);
+            $enableUser->acount_status = 0;
+            $enableUser->save();
+              }
+          }
 
            $verifyUser = VerifyUser::create([
             'user_id' => $user->id,
@@ -252,6 +262,13 @@ return redirect()->route('viewData');
        
         return view('clients.view', compact('client_info', 'user'));
     }*/
+
+    public function clientFullView($id){
+
+      $clients = Client::with('CompanyManager')->findOrFail($id);
+
+      return view('clients.clientFullView', compact('clients'));
+    }
     public function view(){
 
         $client_info = Client::with('CompanyManager')->get();
@@ -260,40 +277,6 @@ return redirect()->route('viewData');
        
         return view('clients.view', compact('client_info', 'user'));
     }
-
-public function parseImport(CsvImportRequest $request)
-{
-  echo "string";dd();
-
-    $path = $request->file('csv_file')->getRealPath();
-
-    if ($request->has('header')) {
-        $data = Excel::load($path, function($reader) {})->get()->toArray();
-    } else {
-        $data = array_map('str_getcsv', file($path));
-    }
-
-    if (count($data) > 0) {
-        if ($request->has('header')) {
-            $csv_header_fields = [];
-            foreach ($data[0] as $key => $value) {
-                $csv_header_fields[] = $key;
-            }
-        }
-        $csv_data = array_slice($data, 0, 2);
-
-        $csv_data_file = CsvData::create([
-            'csv_filename' => $request->file('csv_file')->getClientOriginalName(),
-            'csv_header' => $request->has('header'),
-            'csv_data' => json_encode($data)
-        ]);
-    } else {
-        return redirect()->back();
-    }
-
-    return view('data.import_fields', compact( 'csv_header_fields', 'csv_data', 'csv_data_file'));
-
-}
 
     public function importExcel(Request $request)
     {  

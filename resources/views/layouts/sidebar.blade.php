@@ -16,50 +16,39 @@
           </li>
            @if(auth::user()->role_id == 1)
           <li class="">
-            <a href="#" class="dropdown-toggle">
-              <i class="menu-icon fa fa-desktop"></i>
-              <span class="menu-text"> Admin </span>
-            </a>
+           
             <ul class="submenu" style="display: block">
             <li class="">
-                        <a href="#" class="dropdown-toggle">
-                          <i class="menu-icon fa fa-caret-right"></i>
+                        <a href="#" >
                           Client
-                          <b class="arrow fa fa-angle-down"></b>
                         </a>
                          <ul class="submenu" style="display: block">
                          <li class="">
                           <a href="{{route('client.index')}}">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            Add New client
+                           Create Client
                           </a>
                         </li>
                          <li class="">
                           <a href="{{route('client.view')}}">
-                            <i class="menu-icon fa fa-caret-right"></i>
                             Manage Clients
                           </a>
                         </li>
                       </ul>
                     </li>
                    <li class="">
-                        <a href="#" class="dropdown-toggle">
-                          <i class="menu-icon fa fa-caret-right"></i>
-                          Users
-                          <b class="arrow fa fa-angle-down"></b>
-                        </a>
+                        <a href="#">
+                         Users
+                       </a>
                          <ul class="submenu" style="display: block">
                        
 
                         <li class="">
                           <a href="{{route('user')}}">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            Add New Users
+                            Creates Users
                           </a>
                         </li>
                          <li class="">
                           <a href="{{route('userView')}}">
-                            <i class="menu-icon fa fa-caret-right"></i>
                            Manage Users
                           </a>
                         </li>
@@ -74,44 +63,24 @@
           </li>
           @else
             <li class="">
-            <a href="#" class="dropdown-toggle">
-               <i class="menu-icon fa fa-file"></i>
-              <span class="menu-text">Data Management</span>
-              <b class="arrow fa fa-angle-down"></b>
-            </a>
-            <b class="arrow"></b>
-            <ul class="submenu">
+            <ul class="submenu" style="display: block;">
               @if(auth::user()->role_id == 5)
               <li class="">
                 <a href="{{route('data_upload')}}">
-                  <i class="menu-icon fa fa-caret-right"></i>
-                  Upload Data
+                   Upload Data
                 </a>
-                <b class="arrow"></b>
               </li>
                <li class="">
               <a href="{{route('viewData')}}">
-                  <i class="menu-icon fa fa-caret-right"></i>
                  View Data
                 </a>
-
-                <b class="arrow"></b>
               </li>
               @else
               <li class="">
               <a href="{{route('viewData')}}">
-                  <i class="menu-icon fa fa-caret-right"></i>
-                 View Data
+                  View Data
                 </a>
-                <b class="arrow"></b>
               </li>
-             <!--  <li class="">
-              <a href="{{url('data.compare')}}">
-                  <i class="menu-icon fa fa-caret-right"></i>
-                  Compare Data
-                </a>
-                <b class="arrow"></b>
-              </li> -->
               @endif
             </ul>
           </li>

@@ -13,10 +13,10 @@
                   <div class="page-header">
                     <h1>
                       Add Users
-                      <small>
+                     <!--  <small>
                         <i class="ace-icon fa fa-angle-double-right"></i>
                         Add Users
-                      </small>
+                      </small> -->
                     </h1>
                   </div><!-- /.page-header -->
                   <div class="row">
@@ -32,11 +32,10 @@
                             {{ session('warning') }}
                         </div>
                     @endif
- <hr>
             <div class='col-lg-4 col-lg-offset-4'>
 
-              <h1><i class='fa fa-user-plus'></i> Add User</h1>
-                        <hr>
+             <!--  <h1><i class='fa fa-user-plus'></i> Add User</h1>
+                        <hr> -->
 
                   <form action="{{route('user_signup')}}" method="POST" id="form">
                     {{csrf_field()}}
@@ -55,16 +54,6 @@
                              
                           </label>
                          </div>
-
-                      <!--    <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
-                          <label class="block clearfix">Company
-                              <select name="client_id" class="form-control" id="form-field-select-2">
-                            @foreach($client as $client)
-                                <option value="{{$client->id}}">{{$client->organization_name}}</option>
-                              @endforeach
-                                </select>
-                          </label>
-                         </div> -->
 
                         <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
                           <label class="block clearfix">First Name
@@ -141,7 +130,7 @@
                           </label>
                         </div>
 
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary pull-right">Save</button>
                   </form>
 
             </div>

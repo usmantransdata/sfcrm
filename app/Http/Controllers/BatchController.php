@@ -25,12 +25,6 @@ class BatchController extends Controller
 {
 
 
-     public function __construct() {
-     $this->middleware(['auth', 'client']);
-       }
-
-
-
     public function upload(){
        
         $company = Client::where('contact_person_email', '=', Auth::user()->email)->first();

@@ -13,10 +13,6 @@
                   <div class="page-header">
                     <h1>
                       Edit Users
-                      <small>
-                        <i class="ace-icon fa fa-angle-double-right"></i>
-                       Edit {{$user->first_name}}
-                      </small>
                     </h1>
                   </div><!-- /.page-header -->
                    @if (session('flash_message'))
@@ -45,7 +41,7 @@
 
                     <div class="form-group">
                         {{ Form::label('email', 'Email') }}
-                        {{ Form::email('email', null, array('class' => 'form-control')) }}
+                        {{ Form::email('email', null, array('class' => 'form-control' , 'readonly' => 'true')) }}
                     </div>
 
                    
