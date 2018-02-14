@@ -47,17 +47,33 @@ class ClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function processImport(Request $request)
+    {
+      $input = $request->all(); 
+      echo "<pre>";
+       print_r($input);
+       //dd();
+       $path = "storage/app/".$input['filename'];
+       $data = Excel::load($path, function($reader) {})->get()->toArray();
+       print_r($data);
+      dd();
+    }
     public function readcsv(Request $request)
     {
-    $path = $request->file('csv_file')->getRealPath();
-    
-
+    $filename = $request->file('csv_file')->getClientOriginalName();
+    $path=$request->file('csv_file')->storeAs('csv', $filename);
+    //print_r($path);
+    //dd();
+    $fullpath="storage/app/";
+     //Excel::load($request->file('uploaded_file')->getRealPath(), function ($reader) {
     if ($request->has('header')) {
-        $data = Excel::load($path, function($reader) {})->get()->toArray();
+        $data = Excel::load($fullpath.$path, function($reader) {})->get()->toArray();
     } else {
-        $data = array_map('str_getcsv', file($path));
+        $data = array_map('str_getcsv', file($fullpath.$path));
     }
-    //print_r($request->has('header'));
+    //print_r($data);
+    $filename=$path;
+    //dd();
     $contentbatch = new CotentBatch;
     $tablecolums = $contentbatch->getTableColumns();
     //print_r($tablecolums);
@@ -80,7 +96,7 @@ class ClientController extends Controller
         return redirect()->back();
     }
  //dd();
-    return view('data.choose_fields', compact( 'csv_header_fields', 'csv_data', 'tablecolums'));
+    return view('data.choose_fields', compact( 'filename','csv_header_fields', 'csv_data', 'tablecolums'));
     }
     public function store(Request $request)
     {
