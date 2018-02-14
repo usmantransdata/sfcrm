@@ -44,7 +44,7 @@
 								    <div class="stepwizard-row setup-panel">
 								      <div class="stepwizard-step">
 								        <a href="#step-1" type="button" class="btn btn-primary btn-circle">1</a>
-								        <p>Enter Batch Detail</p>
+								        <p>Batch Detail</p>
 								      </div>
 								      <div class="stepwizard-step">
 								        <a href="#step-2" type="button" class="btn btn-default btn-circle" disabled="disabled">2</a>
@@ -52,7 +52,11 @@
 								      </div>
 								      <div class="stepwizard-step">
 								        <a href="#step-3" type="button" class="btn btn-default btn-circle" disabled="disabled">3</a>
-								        <p>Step 3</p>
+								        <p>Match Fields</p>
+								      </div>
+								       <div class="stepwizard-step">
+								        <a href="#step-4" type="button" class="btn btn-default btn-circle" disabled="disabled">4</a>
+								        <p>Finish</p>
 								      </div>
 								    </div>
 								  </div>
@@ -115,13 +119,7 @@
 			                               </div>
 			                           </div>
 
-			                           <div class="form-group">
-			                               <div class="col-md-8 col-md-offset-4">
-			                                   <button type="submit" class="btn btn-primary">
-			                                       Parse CSV
-			                                   </button>
-			                               </div>
-			                           </div>
+			                           
 			                       </form>
 			                   </div>
 			               </div>
@@ -149,7 +147,15 @@
 								      </div>
 								    </div>
 								 <!--  </form> -->
-								  
+								  <div class="row setup-content" id="step-4">
+								      <div class="col-xs-6 col-md-offset-3">
+								        <div class="col-md-12">
+								          <h3> Batch Detail</h3>
+								          
+								          <button class="btn btn-primary nextBtn btn-lg pull-right" type="button" >Finish</button>
+								        </div>
+								      </div>
+								    </div>
 								</div>
 							<!-- multi step wizard form ends here -->
 							</div> <!-- /.col xs-12 -->
