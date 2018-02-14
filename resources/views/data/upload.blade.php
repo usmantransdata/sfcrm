@@ -20,6 +20,10 @@
 					</div><!-- /.page-header -->
 <form class="form-horizontal" method="POST" action="{{route('readcsv')}}" enctype="multipart/form-data" >
 	{{ csrf_field() }}
+                                
+                                
+                                
+	<input type="hidden" name="company" value="{{$company->id}}">
 						<div class="row">
 							<div class="col-xs-12">
 								<div class="container">
