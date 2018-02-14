@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
   @include('layouts.header')
-  @include('layouts.sidebar')
 
+  @if(auth::user()->role_id != 5 || auth::user()->role_id != 2)
+
+  @else
+  @include('layouts.sidebar')
+  @endif
   <body class="no-skin">
           <div class="main-container" id="main-container">
             <script type="text/javascript">
@@ -10,12 +14,24 @@
             </script>
               <div class="page-content">
                 <div class="page-content-area">
+                  @if(auth::user()->role_id == 5)
+                  <div class="col-xs-12 col-xs-offset-10">
+                    <a href="{{route('data_upload')}}">
+                        <button class="btn btn-app btn-warning btn-lg" style="height: 80px;width: 115px;">Upload Data
+                            <i class="ace-icon fa fa-cloud-upload bigger-200"></i>
+                        </button>
+                      </a>
+                      </div>
+                      @endif
                   <div class="page-header">
                     <h1>
                      Batch Details
                   
                     </h1>
+                     
                   </div><!-- /.page-header -->
+
+
                    @if (session('flash_message'))
                       <div class="alert alert-success">
                           {{ session('flash_message') }}
@@ -46,13 +62,16 @@
                                 </label>
                               </th>
                              @if(auth::user()->role_id == 2)
-                             <th>Dowwnload</th>
+                             <th>Download</th>
                              @endif
 
                               @if(auth::user()->role_id == 4)
-                             <th>Dowwnload</th>
+                             <th>Download</th>
                              @endif
-                            <th>Company Name</th>
+                              @if(auth::user()->role_id != 5)
+                             <th>Company Name</th>
+                             @endif
+                            
                              <th>Btach Name</th>
                              <th>Count</th>
                              <th>Status</th>
@@ -65,6 +84,8 @@
                               @if(auth::user()->role_id == 4)
                              <th>Action</th>
                              @endif
+
+                           
                           <!--    <th>Status</th>
                              <th></th> -->
                              
@@ -136,7 +157,7 @@
                                 </label>
                               </td>
                                 
-                              <td>{{$data->client->organization_name}}</td>
+                             <!--  <td>{{$data->client->organization_name}}</td> -->
                           
                             <td>{{$data->batch_name}}</td>
                             <td>{{$data->total_record_count}}</td>
@@ -146,13 +167,20 @@
                             <td>
                               <center>
                                 <a data-toggle="modal" data-target="#myModal" data-id="{{$data->id}}"><span class="glyphicon glyphicon-edit">
-                                  
-                                </span></a>
+                                  </span>
+                                </a>
+
+                                <span>&nbsp;/&nbsp;</span> 
+
+                                <a data-toggle="modal" data-target="#delBatch" data-id="{{$data->id}}">
+                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                              </a>
                               </center>
+
+                             
                             </td>
                             
                             @endif
-
                              @if($data->batchStatus->status == 'Submited')
                             <td>
                             </td>
@@ -401,8 +429,36 @@
                    <span  class="text-success"><h3>
                    Are you sure you want to change status Submited</h3></span></a></a>
                     <input type="hidden" name="client_id" value="" class="client_class">
-                     <input type="hidden" name="pendindStatus" value="3" >
+                     <input type="hidden" name="pendindStatus" value="2" >
                   </div>
+               
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Ok</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                  </div>
+
+                    </form>
+                </div>
+
+
+              </div>
+            </div>
+
+            <!--delBatch-->
+
+             <div id="delBatch" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                
+                  <form action="{{route('delBatch')}}" method="delete" >
+                     {{csrf_field()}}
+                  <div class="modal-body">
+                   <span  class="text-danger"><h3>
+                   Are you sure you want delete this batch ?</h3></span></a></a>
+                    <input type="hidden" name="batch_id" value="" class="batch_id">
+                 </div>
                
                   <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Ok</button>
@@ -503,6 +559,13 @@
   $('#startQa').on('show.bs.modal', function (e) {
   var id = $(e.relatedTarget).data('id');
       $('.startQa_status').val(id);   /*
+        proceed with rest of modal using the rowid variable as necessary 
+        */
+     });
+
+  $('#delBatch').on('show.bs.modal', function (e) {
+  var id = $(e.relatedTarget).data('id');
+      $('.batch_id').val(id);   /*
         proceed with rest of modal using the rowid variable as necessary 
         */
      });

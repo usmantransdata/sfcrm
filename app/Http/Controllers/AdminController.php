@@ -67,19 +67,39 @@ class AdminController extends Controller
 
 
      public function addUsers(){
-        $roles = Roles::get();
-        $client = Client::get();
-        return view('users.create', compact('roles', 'client'));
+
+        if(Auth::check()){
+         // print_r(Auth::user()->role_id);dd();
+            if(Auth::user()->role_id == 1){
+                 $roles = Roles::get();
+                 $client = Client::get();
+                 return view('users.create', compact('roles', 'client'));
+         }
+                else{
+                  return redirect()->back();
+                }
+       }
+
+
     }
 
      public function userView(){
-        $id = Auth::user()->client_id;
-        //echo $id;
-        $user = User::with('roles')/*->where('users.client_id', '=', $id)*/->get();
-        //DB::table('users')->select('users.*', 'roles.*')->join('roles', 'roles.id', '=', 'users.role_id')->get();
-      //  print_r($user);dd();
-        return view('users.view', compact('user'));
-    }
+
+        if(Auth::check()){
+         // print_r(Auth::user()->role_id);dd();
+            if(Auth::user()->role_id == 1){
+               $id = Auth::user()->client_id;
+                 $user = User::with('roles')/*->where('users.client_id', '=', $id)*/->get();
+            return view('users.view', compact('user'));
+                     }
+                else{
+                  return redirect()->back();
+                }
+       }
+
+
+
+   }
 
 
     public function getUsers(){

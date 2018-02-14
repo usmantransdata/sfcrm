@@ -1,6 +1,9 @@
 <!DOCTYPE html>
   @include('layouts.header')
+  @if(auth::user()->role_id != 5 || auth::user()->role_id != 2)
+  @else
   @include('layouts.sidebar')
+  @endif
 
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
@@ -11,14 +14,24 @@
               try{ace.settings.check('main-container' , 'fixed')}catch(e){}
             </script>
               <div class="page-content">
-                <div class="page-content-area">
+
+              	 @if(auth::user()->role_id == 5)
+                  <div class="col-xs-12 col-xs-offset-10">
+                    <a href="{{route('viewData')}}">
+                        <button class="btn btn-app btn-success btn-lg" style="height: 80px;width: 125px;">Manage Data
+                       <i class="ace-icon fa fa-cog bigger-230"></i>
+                        </button>
+                      </a>
+                      </div>
+                      @endif
                   <div class="page-header">
                     <h1>
 								Upload Data
 								
 							</h1>
 					</div><!-- /.page-header -->
-
+<form class="form-horizontal" method="POST" action="{{route('readcsv')}}" enctype="multipart/form-data" >
+	{{ csrf_field() }}
 						<div class="row">
 							<div class="col-xs-12">
 								<div class="container">
@@ -71,7 +84,7 @@
 			                   <div class="panel-heading">CSV Import</div>
 
 			                   <div class="panel-body">
-		<form class="form-horizontal" method="POST" action="{{route('import_parse')}}" >
+		
 			                           {{ csrf_field() }}
 
 			                           <div class="form-group{{ $errors->has('csv_file') ? ' has-error' : '' }}">
@@ -137,6 +150,7 @@
 							<!-- multi step wizard form ends here -->
 							</div> <!-- /.col xs-12 -->
 						</div><!-- /.row -->
+					</form>	
 					</div><!-- /.page-content-area -->
 				</div><!-- /.page-content -->
 			</div><!-- /.main-container -->

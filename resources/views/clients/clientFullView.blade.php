@@ -13,8 +13,10 @@
                   <div class="page-header">
                     <h1>
                     CLIENT VIEW
-                  
                     </h1>
+                    <a href="{{ url()->previous() }}" class="col-lg-8 col-lg-offset-2" style="margin-top: -30px">
+                     <i class="fa fa-arrow-left btn-lg" aria-hidden="true"></i>
+                    </a>
                   </div><!-- /.page-header -->
                   <div class="row">
                     <div class="col-lg-12">
@@ -252,14 +254,7 @@
                                 @endif
                        </div> 
                      </div>
-
-
-                     <div class="col-lg-8 col-lg-offset-2"> 
-                       <p>Enable or Disable Account Status</p>
-                          <input name="switch-field-1" id="switch-field-1" class="ace ace-switch" type="checkbox" checked="checked" />
-                          <span class="lbl"></span>
-                     
-                      </div>
+                   
                      </fieldset>
                       <hr>
   <div class="col-lg-8 col-lg-offset-2" style="margin-top: 20px">

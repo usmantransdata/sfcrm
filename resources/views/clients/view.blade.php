@@ -7,6 +7,19 @@
             <script type="text/javascript">
               try{ace.settings.check('main-container' , 'fixed')}catch(e){}
             </script>
+
+        <!-- #section:basics/content.breadcrumbs -->
+       <!--  <div class="breadcrumbs" id="breadcrumbs">
+
+          <ul class="breadcrumb">
+            <li>
+              <i class="ace-icon fa fa-home home-icon"></i>
+              <a href="#">Home</a>
+            </li>
+            <li class="active">Dashboard</li>
+          </ul>
+        </div>   -->
+
               <div class="page-content">
                 <div class="page-content-area">
                   <div class="page-header">
@@ -23,7 +36,7 @@
                       <div class="alert alert-success">
                           {{ session('status') }}
                       </div>
-              @endif   
+                   @endif   
                     <div class="main-content">
             <div class="page-content">
               <div class="page-content-area">
@@ -50,7 +63,7 @@
                                  
                                 </label>
                               </th>
-                            <!--  <th>Company</th> -->
+                           <th>Company</th> 
                              <th>Name</th>
                              <th>Email</th>
                              <th>Phone Number</th>
@@ -77,7 +90,7 @@
                                 </label>
                               </td>
 
-                           <!--  <td>{{ $users->organization_name }}</td> -->
+                     <td>{{ $users->organization_name }}</td> 
                             <td>{{ ucwords($users->contact_first_name)}} {{ucwords($users->contact_last_name) }}</td>
                             <td>{{ $users->contact_person_email  }}</td>
                             <td>{{ $users->contact__person_phoneNumber }}</td>

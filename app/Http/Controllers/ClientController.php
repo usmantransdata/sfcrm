@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests;
+
 use App\Http\Requests\CsvImportRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
@@ -11,6 +11,7 @@ use App\Client;
 use App\User;
 use App\OrderBatch;
 use App\BatchDetail;
+use App\CotentBatch;
 use App\CompanyManager;
 use Excel;
 use Session;  
@@ -24,7 +25,8 @@ use Spatie\Permission\Models\Permission;
 
 class ClientController extends Controller
 {
-      
+
+   
     /**
      * Display a listing of the resource.
      *
@@ -32,9 +34,15 @@ class ClientController extends Controller
      */
     public function index()
     {
-      $CompanyManager = User::where('role_id', '=', 2)->get();
-
-        return view('clients.create', compact('CompanyManager'));
+      if(Auth::check()){
+            if(Auth::user()->role_id == 1){
+               $CompanyManager = User::where('role_id', '=', 2)->get();
+                return view('clients.create', compact('CompanyManager'));
+            }
+                else{
+                  return redirect()->back();
+                }
+      }
     }
 
     /**
@@ -43,6 +51,41 @@ class ClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function readcsv(Request $request)
+    {
+    $path = $request->file('csv_file')->getRealPath();
+    
+
+    if ($request->has('header')) {
+        $data = Excel::load($path, function($reader) {})->get()->toArray();
+    } else {
+        $data = array_map('str_getcsv', file($path));
+    }
+    //print_r($request->has('header'));
+    $contentbatch = new CotentBatch;
+    $tablecolums = $contentbatch->getTableColumns();
+    //print_r($tablecolums);
+    
+   $csv_header_fields=array_keys($data[0]);
+    //print_r(array_keys($data[0]));
+//print_r(sizeof($data));
+   
+    if (sizeof($data) > 0) {
+        if ($request->has('header')) {
+            $csv_header_fields = [];
+            foreach ($data[0] as $key => $value) {
+                $csv_header_fields[] = $key;
+            }
+        }
+        $csv_data = $data;
+      
+     //print_r(($data));   
+    } else {
+        return redirect()->back();
+    }
+ //dd();
+    return view('data.choose_fields', compact( 'csv_header_fields', 'csv_data', 'tablecolums'));
+    }
     public function store(Request $request)
     {
         $input = $request->all();
@@ -265,23 +308,40 @@ return redirect()->route('viewData');
 
     public function clientFullView($id){
 
-      $clients = Client::with('CompanyManager')->findOrFail($id);
+       if(Auth::check()){
+         // print_r(Auth::user()->role_id);dd();
+            if(Auth::user()->role_id == 1){
+                $clients = Client::with('CompanyManager')->findOrFail($id);
+               return view('clients.clientFullView', compact('clients'));
+           }
+                else{
+                  return redirect()->back();
+                }
+       }
 
-      return view('clients.clientFullView', compact('clients'));
-    }
+     }
     public function view(){
 
-        $client_info = Client::with('CompanyManager')->get();
+        if(Auth::check()){
+         // print_r(Auth::user()->role_id);dd();
+            if(Auth::user()->role_id == 1){
+               $client_info = Client::with('CompanyManager')->get();
+              $user = User::where('role_id', '=', '2')->get(); 
+              return view('clients.view', compact('client_info', 'user'));
+             }
+                else{
+                  return redirect()->back();
+                }
+       }
 
-        $user = User::where('role_id', '=', '2')->get();
-       
-        return view('clients.view', compact('client_info', 'user'));
+        
     }
 
     public function importExcel(Request $request)
     {  
 
-           
+           echo "sdasd";
+           dd();
               $cols = array();
              $input = $request->all();
                  //  print_r(Input::get('company'));dd();
@@ -380,17 +440,12 @@ return redirect()->route('viewData');
             }else{
               
                 CompanyManager::where('client_id', '=', $input['id'])->update(['user_id' =>trim($input['manager'])]);
-              //  $company->update(['user_id' => $input['manager']]);
-
-              // $companyManager->update(['user_id' => $input['manager']]); 
-              // $companya->update(['user_id' => $input['manager']]);
-              /*$companyManager->update([
-                        'user_id ' => $input['manager']
-                    ]);*/
-            }
            
-          
-            return redirect()->back()->with('status',  'you have successfully assign manager to company');
+            }
+            $managerName = User::findOrFail($input['manager']);
+            $companyName = Client::findOrFail($input['id']);
+           // print_r($companyName->organization_name);dd();
+            return redirect()->back()->with('status',  'you have assigned '.ucwords($managerName->first_name).' as Manager to '. $companyName->organization_name.'');
 
     }
 

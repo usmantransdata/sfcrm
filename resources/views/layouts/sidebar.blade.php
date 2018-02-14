@@ -65,7 +65,7 @@
             <li class="">
             <ul class="submenu" style="display: block;">
               @if(auth::user()->role_id == 5)
-              <li class="">
+              <!-- <li class="">
                 <a href="{{route('data_upload')}}">
                    Upload Data
                 </a>
@@ -74,13 +74,13 @@
               <a href="{{route('viewData')}}">
                  View Data
                 </a>
-              </li>
+              </li> -->
               @else
-              <li class="">
+             <!-- <li class="">
               <a href="{{route('viewData')}}">
                   View Data
                 </a>
-              </li>
+              </li>  -->
               @endif
             </ul>
           </li>
@@ -106,23 +106,15 @@
             try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
           </script>
 
-          <ul class="breadcrumb">
+          <!-- <ul class="breadcrumb">
             <li>
               <i class="ace-icon fa fa-home home-icon"></i>
               <a href="#">Home</a>
             </li>
             <li class="active">Dashboard</li>
-          </ul><!-- /.breadcrumb -->
+          </ul> --><!-- /.breadcrumb -->
 
           <!-- #section:basics/content.searchbox -->
-          <div class="nav-search" id="nav-search">
-            <form class="form-search">
-              <span class="input-icon">
-                <input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
-                <i class="ace-icon fa fa-search nav-search-icon"></i>
-              </span>
-            </form>
-          </div><!-- /.nav-search -->
           <!-- /section:basics/content.searchbox -->
         </div>
 

@@ -27,9 +27,29 @@ class BatchController extends Controller
 
     public function upload(){
        
-        $company = Client::where('contact_person_email', '=', Auth::user()->email)->first();
-       // print_r($company);dd();
-        return view('data.upload', compact('company'));
+
+        if(Auth::check()){
+         // print_r(Auth::user()->role_id);dd();
+            if(Auth::user()->role_id == 5){
+                   $company = Client::where('contact_person_email', '=', Auth::user()->email)->first();
+       return view('data.upload', compact('company'));
+             }
+                else{
+                  return redirect()->back();
+                }
+       }
+
+    }
+
+    public function delBatch(Request $request)
+    {
+
+         $batchDetail = BatchDetail::findOrFail($request['batch_id']);
+         $batchDetail->delete();
+         $orderBatch = OrderBatch::where('batch_id', '=', $request['batch_id'])->delete();
+            
+        return redirect()->back();
+      // print_r($request->all());dd();
     }
     /**
      * Display a listing of the resource.

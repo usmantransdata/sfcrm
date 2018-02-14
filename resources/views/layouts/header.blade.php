@@ -48,10 +48,17 @@
         <!-- /section:basics/sidebar.mobile.toggle -->
         <div class="navbar-header pull-left">
           <!-- #section:basics/navbar.layout.brand -->
-          <a href="#" class="navbar-brand">
+          <a href="{{route('backend')}}" class="navbar-brand">
             <small>
+
+            
+              @if(auth::user()->role_id != 1 and auth::user()->role_id != 2 and auth::user()->role_id != 4)
+                <i class="fa fa-leaf"></i>
+              {{auth::user()->client->organization_name}}
+              @else
               <i class="fa fa-leaf"></i>
-              Trans Data
+              <span>Trans Data</span>
+              @endif
             </small>
           </a>
         </div>
@@ -63,7 +70,12 @@
                 <li class="light-blue">
                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="background-color: transparent;">
                       <img src="{{ asset('/') }}public/dist/images/user.png" style="width: 30px;" class="user-image" alt="User Image">
-                      <span class="hidden-xs">{{ Auth::user()->first_name }}</span>
+                      <span class="hidden-xs">
+                        <?php
+                          $id = auth::user()->role_id;
+                          $roles = \App\Roles::find($id);
+                        ?>
+                        {{ ucwords(Auth::user()->first_name) }} {{ ucwords(Auth::user()->last_name) }} ( {{$roles->role}} )</span>
                     </a>
 
                   <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">

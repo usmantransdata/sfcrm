@@ -21,7 +21,19 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('index');
+        if(Auth::check())
+            {
+                if(Auth::user()->role_id == 1){
+
+                     $orderBatch = \App\BatchDetail::with('client')->with('batchStatus')->get();
+       
+                        return view('index', compact('orderBatch'));
+                }else
+                {
+                    return redirect()->back();
+                }
+            }
+        
     }
 
    

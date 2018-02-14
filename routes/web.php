@@ -22,13 +22,14 @@ Route::group(['middleware' => 'auth'], function () {
 Route::post('userActivate', 'AdminController@userActivate')->name('userActivate');	
 
 
-Route::post('/import_parse', 'ClientController@parseImport')->name('import_parse');
-//Route::post('/import_process', 'ClientController@processImport')->name('import_process');
+Route::post('import_parse', 'ClientController@parseImport')->name('import_parse');
+Route::post('import_process', 'ClientController@processImport')->name('import_process');
 
 
 Route::post('user_signup', 'AdminController@signup')->name('user_signup');
 
 Route::get('backend', 'HomeController@index')->name('backend');
+Route::post('readcsv', 'ClientController@readcsv')->name('readcsv');
 
 Route::get('user', 'AdminController@addUsers')->name('user');
 
@@ -48,8 +49,10 @@ Route::get('clientFullView/{id}', 'ClientController@clientFullView')->name('clie
 
 Route::get('getUsers' , 'AdminController@getUsers')->name('getUsers');
 
+
 Route::get('viewData' , 'BatchDetailController@index')->name('viewData');
 
+Route::get('delBatch', 'BatchController@delBatch')->name('delBatch');
 
 Route::post('batchDetail', 'BatchDetailController@store')->name('batchDetail');
 
