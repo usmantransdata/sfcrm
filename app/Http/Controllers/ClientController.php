@@ -51,17 +51,91 @@ class ClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function processImport(Request $request)
+    {
+      $input = $request->all(); 
+      
+       $path = "storage/app/".$input['filename'];
+       $data = Excel::load($path, function($reader) {})->get()->toArray();
+       $id = Auth::user()->id; 
+                
+                $batch_detail = new  BatchDetail();
+                $batch_detail->uploader_id = $id;
+                $batch_detail->client_id = $input['company'];
+                $batch_detail->batch_name = $input['batch_name'];
+                $batch_detail->status_id = 1;
+                $batch_detail->instructions = $input['instructions'];
+              //  $batch_detail->total_record_count = count();
+               // $batch_detail->total_record_count = count();
+              //  dd($batch_detail);
+               $batch_detail->save();
+               $cols = array();
+               $count = 0; 
+               //echo "<pre>";
+               //print_r($input['first_name']);
+               //print_r($data);
+               //echo $input['firstname'];
+               echo $batch_detail->id;
+               //dd();
+              
+
+               foreach ($data as $key => $value) {
+                   // print_r($row);dd();
+                   /*foreach ($row as $value) {*/
+                   // print_r($value);dd();
+                    $count++;
+                    //$firstname=$value[];
+                    $cols['batch_id'] = $batch_detail->id;
+                    $cols['first_name'] =$value[$input['first_name']];
+                    $cols['last_name'] =$value[$input['last_name']];
+                     $cols['title'] =$value[$input['title']];
+                    $cols['company_name'] =$value[$input['company_name']];
+                    $cols['email1'] =$value[$input['email1']];
+                    $cols['email2'] =$value[$input['email2']];
+                    $cols['email3'] =$value[$input['email3']];
+                    $cols['phone_number1'] =$value[$input['phone_number1']];
+                    $cols['phone_number2'] =$value[$input['phone_number2']];
+                    $cols['phone_number3'] =$value[$input['phone_number3']];
+                    $cols['address1'] =$value[$input['address1']];
+                    $cols['address2'] =$value[$input['address2']];
+                    $cols['address3'] =$value[$input['address3']];
+                    $cols['city'] =$value[$input['city']];
+                    $cols['state'] =$value[$input['state']];
+                    $cols['zip'] =$value[$input['zip']];
+                    $cols['country'] =$value[$input['country']];
+                    $cols['disposition'] ='';
+                    $cols['validation'] ='';
+                    $cols['health_status'] ='';
+
+                    $data = CotentBatch::create($cols);
+                   
+                  
+                }
+                BatchDetail::where('id', $batch_detail->id)->update(array('total_record_count' => $count));
+                return redirect()->route('viewData')->with('message', 'You successfully added new batch order!!');
+
+      
+      
+    }
     public function readcsv(Request $request)
     {
-    $path = $request->file('csv_file')->getRealPath();
     
-
+    $input = $request->all(); 
+    
+    $filename = $request->file('csv_file')->getClientOriginalName();
+    $path=$request->file('csv_file')->storeAs('csv', $filename);
+    //print_r($path);
+    //dd();
+    $fullpath="storage/app/";
+     //Excel::load($request->file('uploaded_file')->getRealPath(), function ($reader) {
     if ($request->has('header')) {
-        $data = Excel::load($path, function($reader) {})->get()->toArray();
+        $data = Excel::load($fullpath.$path, function($reader) {})->get()->toArray();
     } else {
-        $data = array_map('str_getcsv', file($path));
+        $data = array_map('str_getcsv', file($fullpath.$path));
     }
-    //print_r($request->has('header'));
+    //print_r($data);
+    $filename=$path;
+    //dd();
     $contentbatch = new CotentBatch;
     $tablecolums = $contentbatch->getTableColumns();
     //print_r($tablecolums);
@@ -78,13 +152,18 @@ class ClientController extends Controller
             }
         }
         $csv_data = $data;
+        $batch_name=$input['batch_name'];
+        $due_date=$input['due_date'];
+        $instructions=$input['instructions']; 
+        $header=$input['header'];
+        $company=$input['company'];
       
      //print_r(($data));   
     } else {
         return redirect()->back();
     }
  //dd();
-    return view('data.choose_fields', compact( 'csv_header_fields', 'csv_data', 'tablecolums'));
+    return view('data.choose_fields', compact('company','batch_name','due_date','instructions','header', 'filename','csv_header_fields', 'csv_data', 'tablecolums'));
     }
     public function store(Request $request)
     {
@@ -340,8 +419,7 @@ return redirect()->route('viewData');
     public function importExcel(Request $request)
     {  
 
-           echo "sdasd";
-           dd();
+          
               $cols = array();
              $input = $request->all();
                  //  print_r(Input::get('company'));dd();

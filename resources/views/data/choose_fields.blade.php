@@ -24,11 +24,18 @@
 								<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" method="POST" action="{{ route('import_process') }}">
 							    {{ csrf_field() }}
+                                <input type="hidden" name='filename' value="{{$filename}}"> 
+                                <input type="hidden" name='batch_name' value="{{$batch_name}}"> 
+                                <input type="hidden" name='due_date' value="{{$due_date}}"> 
+                                <input type="hidden" name='instructions' value="{{$instructions}}"> 
+                                <input type="hidden" name='header' value="{{$header}}"> 
+                                <input type="hidden" name="company" value="{{$company}}">
 
 							    <table class="table">
 							    	@foreach ($tablecolums as $key => $value)
-							    	   @if($value!='id')
-							                 <tr><td>{{ $value }}:</td><td>
+							    	   @if($value!='id' && $value!='batch_id' && $value!='health_status' && $value!='disposition' && $value!='validation' && $value!='created_date' && $value!='updated_date')
+							    	   
+							                 <tr><td>{{ucfirst(str_replace('_', ' ', $value))}}:</td><td>
                                                <select name="{{ $value }}">
                                                	@foreach ($csv_header_fields as $db_field)
 							                            <option value="{{ $db_field }}">{{ $db_field }}</option>
