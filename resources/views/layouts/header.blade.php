@@ -48,19 +48,21 @@
         <!-- /section:basics/sidebar.mobile.toggle -->
         <div class="navbar-header pull-left">
           <!-- #section:basics/navbar.layout.brand -->
-          <a href="{{route('backend')}}" class="navbar-brand">
-            <small>
-
-            
-              @if(auth::user()->role_id != 1 and auth::user()->role_id != 2 and auth::user()->role_id != 4)
-                <i class="fa fa-leaf"></i>
-              {{auth::user()->client->organization_name}}
+           @if(auth::user()->role_id != 1 and auth::user()->role_id != 2 and auth::user()->role_id != 4)
+              <a href="{{route('backend')}}" class="navbar-brand">
+                <small>
+                 <i class="fa fa-leaf"></i>
+                  {{auth::user()->client->organization_name}}
+                </small>
+                </a>
               @else
+              <a href="#" class="navbar-brand">
               <i class="fa fa-leaf"></i>
-              <span>Trans Data</span>
+                 <span>Trans Data</span>
+               </a>
               @endif
-            </small>
-          </a>
+           
+         
         </div>
 
         <!-- #section:basics/navbar.dropdown -->

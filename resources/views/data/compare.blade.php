@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   @include('layouts.header')
-  @include('layouts.sidebar')
 
+  
   <body class="no-skin">
           <div class="main-container" id="main-container">
             <script type="text/javascript">

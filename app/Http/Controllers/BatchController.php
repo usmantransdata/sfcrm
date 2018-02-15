@@ -51,6 +51,13 @@ class BatchController extends Controller
         return redirect()->back();
       // print_r($request->all());dd();
     }
+
+    public function batchFullView($id){
+
+            $content_batch = OrderBatch::where('batch_id', '=', $id)->get();
+
+            return view('data.batch_full_view', compact('content_batch'));
+    }
     /**
      * Display a listing of the resource.
      *
@@ -82,6 +89,18 @@ class BatchController extends Controller
         //
     }
 
+    public function updateBatch(Request $request, $id){
+
+        $batch_detail = BatchDetail::find($id);
+        $batch_detail->batch_name = $request['batch_name'];
+        $batch_detail->instructions = $request['notes'];
+        $batch_detail->due_date = $request['due_date'];
+        $batch_detail->save();
+
+
+        return redirect()->to('viewData')->with('edit_message', 'You have successfully edit the batch');
+    }
+
     /**
      * Display the specified resource.
      *
@@ -90,7 +109,9 @@ class BatchController extends Controller
      */
     public function show($id)
     {
-        //
+        $batchEdit = BatchDetail::find($id);
+        return view('data.batch_edit', compact('batchEdit'));
+       // echo "string";dd();
     }
 
     /**

@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
   @include('layouts.header')
+
+   @if(auth::user()->role_id != 5 || auth::user()->role_id != 2)
+
+  @else
   @include('layouts.sidebar')
+  @endif
 
   <body class="no-skin">
           <div class="main-container" id="main-container">

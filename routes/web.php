@@ -42,6 +42,11 @@ Route::get('data_upload', 'BatchController@upload')->name('data_upload');
 
 Route::post('importExcel', 'ClientController@importExcel')->name('importExcel');
 
+Route::get('batchFullView/{id}', 'BatchController@batchFullView')->name('batchFullView');
+
+Route::get('batchEdit/{id}', 'BatchController@show')->name('batchEdit');
+
+Route::post('updateBatch/{id}', 'BatchController@updateBatch')->name('updateBatch');
 
 Route::resource('client', 'ClientController');
 

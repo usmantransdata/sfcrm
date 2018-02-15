@@ -266,13 +266,6 @@ class ClientController extends Controller
        $cols = array();
        $orderBatach=array();
              $input = $request->all();
-             //$existingdata=array();
-            // print_r($input['file_id']);dd();
-             
-
-            //print_r($orderBatach);dd();
-                 //  print_r(Input::get('company'));dd();
-            // dd($request); 
           if($request->hasFile('uploaded_file')){
           //  echo "string";dd();
             //$existingdata=[];
@@ -328,11 +321,23 @@ class ClientController extends Controller
                                 }
                                  else{
                                   $existingdata[$j]['health_status']="Good Record";
-                                   $existingdata[$j]['disposition']=$importdata[$key]['disposition'];
-                                    $existingdata[$j]['validation']=$importdata[$key]['validation'];
+                                   
+                                    
                                     $existingdata[$j]['id']=$importdata[$key]['id'];
                                     $existingdata[$j]['batch_id']=$importdata[$key]['batch_id'];
+
+                                    if(is_null($existingdata[$j]['disposition'])){
+                                   $existingdata[$j]['disposition']=$importdata[$key]['disposition'];
+                                  }
+                                  
+                                     if(is_null($existingdata[$j]['validation'])){
+                                   $existingdata[$j]['validation']=$importdata[$key]['validation'];
+                                  }
+
+
+                                    if(is_null($existingdata[$j]['organization'])){
                                     $existingdata[$j]['organization']=$importdata[$key]['organization'];
+                                  }
 
                                 }
                              }

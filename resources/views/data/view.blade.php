@@ -15,10 +15,16 @@
               <div class="page-content">
                 <div class="page-content-area">
                   @if(auth::user()->role_id == 5)
-                  <div class="col-xs-12 col-xs-offset-10">
+                  <div class="col-xs-12 col-xs-offset-5">
                     <a href="{{route('data_upload')}}">
-                        <button class="btn btn-app btn-warning btn-lg" style="height: 80px;width: 115px;">Upload Data
+                        <button class="btn btn-primary btn-lg">Upload Data
                             <i class="ace-icon fa fa-cloud-upload bigger-200"></i>
+                        </button>
+                      </a>
+
+                      <a href="{{route('viewData')}}">
+                        <button class="btn btn-primary btn-lg" disabled="disabled">Manage Data
+                       <i class="ace-icon fa fa-cog bigger-230"></i>
                         </button>
                       </a>
                       </div>
@@ -36,7 +42,13 @@
                       <div class="alert alert-success">
                           {{ session('flash_message') }}
                       </div>
-                   @endif   
+                   @endif  
+
+                   @if (session('edit_message'))
+                      <div class="alert alert-success">
+                          {{ session('edit_message') }}
+                      </div>
+                   @endif 
                     <div class="main-content">
             <div class="page-content">
               <div class="page-content-area">
@@ -52,15 +64,15 @@
                         <thead>
                           <tr>
 
-                              <th class="center">
+                             <!--  <th class="center">
                                 <label class="position-relative">
                                    
-                                  <input type="checkbox" class="ace" name="checkbox-top" />
+                                <input type="checkbox" class="ace" name="checkbox-top" /> 
 
                                   <span class="lbl"></span> 
                                  
                                 </label>
-                              </th>
+                              </th> -->
                              @if(auth::user()->role_id == 2)
                              <th>Download</th>
                              @endif
@@ -74,18 +86,16 @@
                             
                              <th>Btach Name</th>
                              <th>Count</th>
-                             <th>Status</th>
-                             @if(auth::user()->role_id == 5)
-                             <th>Action</th>
-                             @endif
-                              @if(auth::user()->role_id == 2)
-                             <th>Action</th>
-                             @endif
-                              @if(auth::user()->role_id == 4)
+                             <th>Notes</th>
+                            
+                             @if(auth::user()->role_id == 5 || auth::user()->role_id == 2 || auth::user()->role_id == 4)
+                             <th>Proposed Due Date</th>
+                              <th>Status</th>
                              <th>Action</th>
                              @endif
 
-                           
+                             
+
                           <!--    <th>Status</th>
                              <th></th> -->
                              
@@ -137,7 +147,7 @@
                                    @else
                                    <td ><span class="text-success">Submited</span><br><br>
                                      <a data-toggle="modal" data-id="{{$data->id}}" data-target="#manager" style="cursor: pointer;">
-                                   <span class="text-primary">Change ?</span>   <span class="glyphicon glyphicon-edit"></span>
+                                  <!--  <span class="text-primary">Change ?</span>   <span class="glyphicon glyphicon-edit"></span> -->
                                     </a></td>
                                   @endif
 
@@ -148,32 +158,43 @@
                 <!-- client area  -->
                            <tr>
 
-                              <td class="center">
+                             <!--  <td class="center">
                                 <label class="position-relative">
                                   
                                   <input type="checkbox" class="ace" value="" name="input[]" />
                                   <span class="lbl"></span>
                                   
                                 </label>
-                              </td>
+                              </td> -->
                                 
                              <!--  <td>{{$data->client->organization_name}}</td> -->
                           
-                            <td>{{$data->batch_name}}</td>
+                            <td><!-- <a data-toggle="modal" data-target="#batch_detail_view" data-id="{{$data->id}}" style="cursor: pointer;"> -->{{$data->batch_name}}</a></td>
                             <td>{{$data->total_record_count}}</td>
-
+                            <td><a href="#" data-toggle="tooltip" title="{{$data->instructions}}">
+                              {{substr($data->instructions, 0, 10)}}
+                               </a>
+                            </td>
+                            <td>{{$data->due_date}}</td>
                             <td class="text-secondary">{{$data->batchStatus->status}}</td>
+                           
                             @if($data->batchStatus->status == 'Pending')
                             <td>
                               <center>
-                                <a data-toggle="modal" data-target="#myModal" data-id="{{$data->id}}"><span class="glyphicon glyphicon-edit">
-                                  </span>
+                                <a data-toggle="modal" data-target="#myModal" data-id="{{$data->id}}">
+                                   <button type="button" class="btn btn-primary btn-xs" style="margin: 10px;margin-bottom: 15px;">Submit</button>
                                 </a>
 
-                                <span>&nbsp;/&nbsp;</span> 
+                                 <a href="{{route('batchEdit', $data->id)}}" style="margin: 10px;">
+                                   <i class="fa fa-pencil-square-o bigger-230" aria-hidden="true"></i>
+                                </a>
+
+                                 <a href="{{route('batchFullView', $data->id)}}" style="margin: 10px;">
+                                   <i class="fa fa-eye bigger-230" aria-hidden="true" ></i>
+                                </a>
 
                                 <a data-toggle="modal" data-target="#delBatch" data-id="{{$data->id}}">
-                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                <i class="fa fa-trash-o bigger-230" aria-hidden="true"></i>
                               </a>
                               </center>
 
@@ -183,22 +204,70 @@
                             @endif
                              @if($data->batchStatus->status == 'Submited')
                             <td>
+                                <center>
+                             
+
+                                 <a href="{{route('batchEdit', $data->id)}}" style="margin: 10px;">
+                                   <i class="fa fa-pencil-square-o bigger-230" aria-hidden="true"></i>
+                                </a>
+
+                                 <a href="{{route('batchFullView', $data->id)}}" style="margin: 10px;">
+                                   <i class="fa fa-eye bigger-230" aria-hidden="true" ></i>
+                                </a>
+
+                              </center>
                             </td>
                             @endif
                               @if($data->batchStatus->status == 'In-Process')
                             <td>
+                                <center>
+                             
+
+                                 <a href="{{route('batchEdit', $data->id)}}" style="margin: 10px;">
+                                   <i class="fa fa-pencil-square-o bigger-230" aria-hidden="true"></i>
+                                </a>
+
+                                 <a href="{{route('batchFullView', $data->id)}}" style="margin: 10px;">
+                                   <i class="fa fa-eye bigger-230" aria-hidden="true" ></i>
+                                </a>
+                                
+                              </center>
                             </td>
                             @endif
                             @if($data->batchStatus->status == 'QA-Review')
                             <td>
+                                <center>
+                             
+
+                                 <a href="{{route('batchEdit', $data->id)}}" style="margin: 10px;">
+                                   <i class="fa fa-pencil-square-o bigger-230" aria-hidden="true"></i>
+                                </a>
+
+                                 <a href="{{route('batchFullView', $data->id)}}" style="margin: 10px;">
+                                   <i class="fa fa-eye bigger-230" aria-hidden="true" ></i>
+                                </a>
+                                
+                              </center>
                             </td>
                             @endif
 
                              @if($data->batchStatus->status == 'Completed')
                             <td>
-                            <span><a href="{{url('download-csv-client', $data->id)}}"><center><i class="fa fa-file-excel-o"></i></center></a></span>
+                                <center>
+                                 <a href="{{route('batchEdit', $data->id)}}" style="margin: 10px;">
+                                   <i class="fa fa-pencil-square-o bigger-230" aria-hidden="true"></i>
+                                </a>
+
+                                 <a href="{{route('batchFullView', $data->id)}}" style="margin: 10px;">
+                                   <i class="fa fa-eye bigger-230" aria-hidden="true" ></i>
+                                </a>
+                                  
+                                    <a href="{{url('download-csv-client', $data->id)}}" style="margin: 10px;"><i class="fa fa-file-excel-o bigger-230"></i></a>
+                              </center>
+                         
                             </td>
                             @endif
+
                            
                         </tr>
                        
@@ -241,19 +310,24 @@
                               @else
                             <tr>
 
-                              <td class="center">
+                              <!-- <td class="center">
                                 <label class="position-relative">
                                   
                                   <input type="checkbox" class="ace" value="" name="input[]" />
                                   <span class="lbl"></span>
                                   
                                 </label>
-                              </td>
+                              </td> -->
                                <td><span><a href="{{url('download-csv', $data->id)}}"><center><i class="fa fa-file-excel-o"></i></center></a></span></td>
                               <td>{{$data->client->organization_name}}</td>
 
                             <td>{{$data->batch_name}}</td>
                             <td>{{$data->total_record_count}}</td>
+                             <td><a href="#" data-toggle="tooltip" title="{{$data->instructions}}">
+                              {{substr($data->instructions, 0, 10)}}
+                               </a>
+                            </td>
+                            <td>{{$data->due_date}}</td>
 
                             <td class="text-secondary">{{$data->batchStatus->status}}
                             <br>
@@ -308,18 +382,23 @@
                                     @else
                                   <tr>
 
-                                    <td class="center">
+                                   <!--  <td class="center">
                                       <label class="position-relative">
                                         
                                         <input type="checkbox" class="ace" value="" name="input[]" />
                                         <span class="lbl"></span>
                                         
                                       </label>
-                                    </td>
+                                    </td> -->
                                    <td><span><a href="{{url('download-csv', $data->id)}}"><center><i class="fa fa-file-excel-o"></i></center></a></span></td> 
                                     <td>{{$data->client->organization_name}}</td>
                                   <td>{{$data->batch_name}}</td>
                                   <td>{{$data->total_record_count}}</td>
+                                  <td><a href="#" data-toggle="tooltip" title="{{$data->instructions}}">
+                              {{substr($data->instructions, 0, 10)}}
+                               </a>
+                            </td>
+                            <td>{{$data->due_date}}</td>
 
                                   <td class="text-secondary">{{$data->batchStatus->status}}
                                   <br>
@@ -422,7 +501,6 @@
 
                 <!-- Modal content-->
                 <div class="modal-content">
-                
                   <form action="{{route('statusChanged')}}" method="POST" >
                     {{csrf_field()}}
                   <div class="modal-body">
@@ -526,14 +604,41 @@
 
               </div>
             </div>            
+<!-- batch detail full view -->
 
+<div id="batch_detail_view" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-body">
+                    <input type="hidden" class="batch" name="batch_detail_id" value="" >
+
+                    
+                  </div>
+               
+                  <div class="modal-footer">
+                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+
+                    </form>
+                </div>
+
+
+              </div>
+            </div>   
+
+            <!-- ends here -->
 
 @include('layouts.footer')
 
  <script src="{{ asset('/') }}public/aceadmin/assets/js/jquery.dataTables.min.js"></script>
     <script src="{{ asset('/') }}public/aceadmin/assets/js/jquery.dataTables.bootstrap.js"></script>
-
-
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+});
+</script> 
 <script type="text/javascript">
  $('#myModal').on('show.bs.modal', function (e) {
   var id = $(e.relatedTarget).data('id');
@@ -566,6 +671,13 @@
   $('#delBatch').on('show.bs.modal', function (e) {
   var id = $(e.relatedTarget).data('id');
       $('.batch_id').val(id);   /*
+        proceed with rest of modal using the rowid variable as necessary 
+        */
+     });
+
+   $('#batch_detail_view').on('show.bs.modal', function (e) {
+  var id = $(e.relatedTarget).data('id');
+      $('.batch').val(id);   /*
         proceed with rest of modal using the rowid variable as necessary 
         */
      });

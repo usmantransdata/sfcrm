@@ -16,10 +16,16 @@
               <div class="page-content">
 
               	 @if(auth::user()->role_id == 5)
-                  <div class="col-xs-12 col-xs-offset-10">
-                    <a href="{{route('viewData')}}">
-                        <button class="btn btn-app btn-success btn-lg" style="height: 80px;width: 125px;">Manage Data
-                       <i class="ace-icon fa fa-cog bigger-230"></i>
+                   <div class="col-xs-12 col-xs-offset-5">
+                    <a href="{{route('data_upload')}}">
+                        <button disabled="disabled" class="btn btn-primary btn-lg">Upload Data
+                            <i class="ace-icon fa fa-cloud-upload bigger-200"></i>
+                        </button>
+                      </a>
+
+                      <a href="{{route('viewData')}}">
+                        <button class="btn btn-primary btn-lg" >Manage Data
+                       <i class="ace-icon fa fa-cog bigger-200"></i>
                         </button>
                       </a>
                       </div>
