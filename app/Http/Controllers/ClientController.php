@@ -157,13 +157,14 @@ class ClientController extends Controller
         $instructions=$input['instructions']; 
         $header=$input['header'];
         $company=$input['company'];
+        $totalcounts=sizeof($data);
       
      //print_r(($data));   
     } else {
         return redirect()->back();
     }
  //dd();
-    return view('data.choose_fields', compact('company','batch_name','due_date','instructions','header', 'filename','csv_header_fields', 'csv_data', 'tablecolums'));
+    return view('data.choose_fields', compact('totalcounts','company','batch_name','due_date','instructions','header', 'filename','csv_header_fields', 'csv_data', 'tablecolums'));
     }
     public function store(Request $request)
     {

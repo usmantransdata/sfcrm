@@ -121,6 +121,7 @@
 			                                       <label>
 			                                           <input type="checkbox" name="header" checked> File contains header row?
 			                                       </label>
+			                                       <a onclick="ExportToTable()" class="btn btn-primary btn-xs">Preview File</a>
 			                                   </div>
 			                               </div>
 			                           </div>
@@ -140,7 +141,7 @@
 								          </div>
  -->
 
-								          <button class="btn btn-primary nextBtn btn-lg pull-right" type="button" >Next</button>
+								          <button class="submitfile btn btn-primary nextBtn btn-lg pull-right" type="submit" >Next</button>
 								        </div>
 								      </div>
 								    </div>
@@ -167,8 +168,22 @@
 							</div> <!-- /.col xs-12 -->
 						</div><!-- /.row -->
 					</form>	
+					<table id="exceltable" class="table table-striped table-bordered table-hover" style="overflow-y: scroll;height: 700px;display: none; width:100%; 
+    width: 984px;overflow-x: scroll;">
+
+                        <thead>
+                        
+                        </thead>
+
+                        <tbody>
+                          
+                      </tbody>
+
+                      </table>
 					</div><!-- /.page-content-area -->
+
 				</div><!-- /.page-content -->
+
 			</div><!-- /.main-container -->
 
 
@@ -234,9 +249,10 @@
    function ExportToTable() {  
        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;  
        //Checks whether the file is a valid csv file  
-       if (regex.test($("#excelfile").val().toLowerCase())) {  
+       if (regex.test($("#csv_file").val().toLowerCase())) {  
            //Checks whether the browser supports HTML5  
            if (typeof (FileReader) != "undefined") {  
+           	$("#exceltable").show();
                var reader = new FileReader();  
                reader.onload = function (e) {  
                    var table = $("#exceltable > tbody");  
@@ -255,10 +271,10 @@
                            table.append(row);  
                        }  
                    }  
-                   $('#exceltable').show();  
+                   $('#csv_file').show();  
                }  
               //reader.readAsText($("#csvfile").item(0));
-              reader.readAsText($("#excelfile")[0].files[0]);  
+              reader.readAsText($("#csv_file")[0].files[0]);  
            }  
            else {  
                alert("Sorry! Your browser does not support HTML5!");  
@@ -274,6 +290,9 @@
 
 <script type="text/javascript">
     	$(document).ready(function () {
+    		$( ".submitfile" ).on( "click", function() {
+    			$("#exceltable").hide();	
+    		});
     	  var navListItems = $('div.setup-panel div a'),
     	          allWells = $('.setup-content'),
     	          allNextBtn = $('.nextBtn');
