@@ -45,7 +45,7 @@
                         <thead>
                           <tr>
 
-                              <th class="center">
+                              <!-- <th class="center">
                                 <label class="position-relative">
                                    
                                   <input type="checkbox" class="ace" name="checkbox-top" />
@@ -53,7 +53,7 @@
                                   <span class="lbl"></span> 
                                  
                                 </label>
-                              </th>
+                              </th> -->
                              <th>Name</th>
                              <th>Email</th>
                               <th>User Type</th>   
@@ -69,7 +69,7 @@
                              @if($users->role_id != 1)
                             <tr>
 
-                              <td class="center">
+                             <!--  <td class="center">
                                 <label class="position-relative">
                                   
                                   <input type="checkbox" class="ace" value="" name="input[]" />
@@ -77,7 +77,7 @@
                                   
                                 </label>
                               </td>
-
+ -->
                             <td>{{ ucwords($users->first_name) }} {{ ucwords($users->last_name) }}</td>
                             <td>{{ $users->email  }}</td>
                            
@@ -105,11 +105,11 @@
                           @endif
                           <td>
                               <a href="{{route('userEdit', $users->id)}}">
-                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                             <i class="fa fa-pencil-square-o bigger-200" aria-hidden="true"></i>
                            </a>
 
                                 <a data-toggle="modal" data-id="{{$users->id}}" data-target="#myModal" style="cursor: pointer;">
-                                <i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                <i class="fa fa-trash-o bigger-200" aria-hidden="true"></i></a>
                             </td>
                         </tr>
                         @endif

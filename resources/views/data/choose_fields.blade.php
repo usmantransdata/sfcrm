@@ -1,6 +1,9 @@
 <!DOCTYPE html>
   @include('layouts.header')
+   @if(auth::user()->role_id != 5 || auth::user()->role_id != 2)
+  @else
   @include('layouts.sidebar')
+  @endif
 
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
@@ -23,7 +26,7 @@
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
 								<div class="container">
-								<div class="stepwizard col-md-offset-2">
+								<div class="stepwizard col-md-offset-4">
 								    <div class="stepwizard-row setup-panel">
 								      <div class="stepwizard-step">
 								        <a href="#step-1" type="button" class="btn btn-default btn-circle" disabled="disabled">1</a>
@@ -45,7 +48,7 @@
 
 								  </div>
 						  
-								  <div class="stepwizard col-md-offset-2" >
+								  <div class="stepwizard col-md-offset-4" >
 								  	
 								
 
@@ -84,17 +87,17 @@
 
 							   
 						</div>
-						<div class="panel panel-default laststep_content" style="display:none;">
+						<div class="panel panel-default laststep_content" style="display:none;padding: 10px">
 									
                                  <p class""><b>Batch Name: </b>{{$batch_name}}</p>
                                  <p class""><b>Proposed Due Date: </b>{{$due_date}}</p>
                                  <p class""><b>Total Count: </b>{{$totalcounts}}</p>
-                                 <p>Are you sure to import this batch</p>
+                                 <p class="text-primary"><b>Are you sure you want to upload this batch ?</b></p>
                                  <p>
-                                 <button type="submit" class="btn btn-primary">
+                                 <button type="submit" class="btn btn-success">
 							        Finish
 							    </button>	
-							     <a href="{{url('viewData')}}" class="btn btn-primary">
+							     <a href="{{url('viewData')}}" class="btn btn-danger">
 							        Cancel
 							    </a>
 

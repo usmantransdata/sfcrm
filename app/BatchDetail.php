@@ -16,7 +16,7 @@ class BatchDetail extends Model
 
  public function orderBatch()
   {
-    return $this->belongsTo('App\OrderBatch');
+    return $this->belongsTo('App\CotentBatch');
   }
 
 

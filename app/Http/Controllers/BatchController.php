@@ -12,6 +12,7 @@ use App\User;
 use App\OrderBatch;
 use App\BatchDetail;
 use App\CompanyManager;
+use App\CotentBatch;
 use Excel;
 use Session;
 use Auth;
@@ -46,7 +47,7 @@ class BatchController extends Controller
 
          $batchDetail = BatchDetail::findOrFail($request['batch_id']);
          $batchDetail->delete();
-         $orderBatch = OrderBatch::where('batch_id', '=', $request['batch_id'])->delete();
+         $orderBatch = CotentBatch::where('batch_id', '=', $request['batch_id'])->delete();
             
         return redirect()->back();
       // print_r($request->all());dd();
@@ -54,7 +55,7 @@ class BatchController extends Controller
 
     public function batchFullView($id){
 
-            $content_batch = OrderBatch::where('batch_id', '=', $id)->get();
+            $content_batch = CotentBatch::where('batch_id', '=', $id)->get();
 
             return view('data.batch_full_view', compact('content_batch'));
     }

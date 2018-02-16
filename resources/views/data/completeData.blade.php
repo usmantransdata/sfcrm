@@ -58,7 +58,7 @@
                         <thead>
                           <tr>
 
-                              <th class="center">
+                              <!-- <th class="center">
                                 <label class="position-relative">
                                    
                                   <input type="checkbox" class="ace" name="checkbox-top" />
@@ -66,13 +66,14 @@
                                   <span class="lbl"></span> 
                                  
                                 </label>
-                              </th><!-- 
+                              </th> -->
+                              <!-- 
                              <th>Id</th>
                              <th>Batch id</th> -->
                              <th>First Name</th>
                              <th>Last Name</th>
                              <th>Title</th>
-                              <th>Phone Number</th>.
+                              <th>Phone Number</th>
                               <th>Validation</th>
                               <th>Disposition</th>
                               <th>Organization</th>
@@ -87,14 +88,14 @@
 
                              @foreach($completedBatch as $data)
                             <tr>
-                              <td class="center">
+                             <!--  <td class="center">
                                 <label class="position-relative">
                                   
                                   <input type="checkbox" class="ace" value="" name="input[]" />
                                   <span class="lbl"></span>
                                   
                                 </label>
-                              </td>
+                              </td> -->
 
                               <!-- 
                             <td>{{ $data->id }}</td>

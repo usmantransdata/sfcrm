@@ -49,7 +49,7 @@
         <div class="navbar-header pull-left">
           <!-- #section:basics/navbar.layout.brand -->
            @if(auth::user()->role_id != 1 and auth::user()->role_id != 2 and auth::user()->role_id != 4)
-              <a href="{{route('backend')}}" class="navbar-brand">
+              <a href="{{route('viewData')}}" class="navbar-brand">
                 <small>
                  <i class="fa fa-leaf"></i>
                   {{auth::user()->client->organization_name}}
@@ -71,18 +71,20 @@
                 <!-- #section:basics/navbar.user_menu -->
                 <li class="light-blue">
                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="background-color: transparent;">
-                      <img src="{{ asset('/') }}public/dist/images/user.png" style="width: 30px;" class="user-image" alt="User Image">
+                      <!-- <img src="{{ asset('/') }}public/dist/images/user.png" style="width: 30px;" class="user-image" alt="User Image"> -->
                       <span class="hidden-xs">
                         <?php
                           $id = auth::user()->role_id;
                           $roles = \App\Roles::find($id);
                         ?>
-                        {{ ucwords(Auth::user()->first_name) }} {{ ucwords(Auth::user()->last_name) }} ( {{$roles->role}} )</span>
+                       <div id="profileImage"></div>
+                        <span id="first_name">{{ ucwords(Auth::user()->first_name)}}</span>
+                         ( {{$roles->role}} )</span>
                     </a>
 
                   <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                      <li class="user-header">
-                     <img src="{{ asset('/') }}public/dist/images/user.png" style="width: 150px;" class="user-image" alt="User Image">
+                     <!-- <img src="{{ asset('/') }}public/dist/images/user.png" style="width: 150px;" class="user-image" alt="User Image"> -->
                       <center>{{ Auth::user()-> first_name }}</center>
                       </p>
                     </li>
@@ -126,3 +128,28 @@
  </body>
 </html>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<style type="text/css">
+  #profileImage {
+      min-width: 40px !important;
+    height: 40px;
+    border-radius: 50%;
+    background: #512DA8;
+    font-size: 30px;
+    color: #fff;
+    display: inline-block;
+    text-align: center;
+    margin: 2px 0;
+    vertical-align: middle;
+}
+</style>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+  var firstName = $('#first_name').text();
+  var intials = $('#first_name').text().charAt(0);
+
+  $('#profileImage').text(intials);
+});
+</script>

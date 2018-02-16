@@ -107,7 +107,7 @@
                           <label class="block clearfix">Password
                             <span class="block input-icon input-icon-right">
                              <input id="password" type="password" class="form-control" name="password" required onChange="checkPasswordMatch();">  
-                             <span><h6>(Password must be lower and upper case include special characters)</h6></span>
+                             <span><h6>(For better security,use a password with lower case, upper case include special characters)</h6></span>
 
                                 @if ($errors->has('password'))
                                     <span class="help-block">

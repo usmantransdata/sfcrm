@@ -81,7 +81,7 @@
 								          </div>
 								          <div class="form-group">
 								            <label class="control-label">Special Notes</label>
-								            <textarea id="instructions" name="instructions" type="text" class="form-control" placeholder="Special Instructions"></textarea>
+								            <textarea id="instructions" name="instructions" type="text" class="form-control" placeholder="Special Instructions" cols="10" rows="5"></textarea>
 								          </div>
 								          <button class="btn btn-primary nextBtn btn-lg pull-right" type="button" >Next</button>
 								        </div>
@@ -91,16 +91,16 @@
 								      <div class="col-xs-6 col-md-offset-3">
 								        <div class="col-md-12">
 								          <h3> Upload & Preview</h3>
-								          <span class="text-info"><a href="">download sample csv file</a></span>
+								          <span class="text-info">
+								          	<a href="{{url('sample-csv')}}">
+								          	Download Sample CSV File</a>
+								          </span>
 								          <br>
 								          <br/>
 			               <div class="panel panel-default">
 			                   <div class="panel-heading">CSV Import</div>
-
 			                   <div class="panel-body">
-		
-			                           {{ csrf_field() }}
-
+			                          
 			                           <div class="form-group{{ $errors->has('csv_file') ? ' has-error' : '' }}">
 			                               <label for="csv_file" class="col-md-4 control-label">CSV file to import</label>
 
@@ -121,37 +121,28 @@
 			                                       <label>
 			                                           <input type="checkbox" name="header" checked> File contains header row?
 			                                       </label>
-			                                       <a onclick="ExportToTable()" class="btn btn-primary btn-xs">Preview File</a>
+			                                       <a onclick="ExportToTable()" class="btn btn-primary btn-xs previewbtn">Preview File</a>
 			                                   </div>
 			                               </div>
 			                           </div>
-
-			                           
-			                       </form>
 			                   </div>
 			               </div>
 			           					          	
-								        <!--   <div class="form-group">
-								            <label class="control-label">Company Name</label>
-								            <input maxlength="200" type="text" required="required" class="form-control" placeholder="Enter Company Name" />
-								          </div>
-								          <div class="form-group">
-								            <label class="control-label">Company Address</label>
-								            <input maxlength="200" type="text" required="required" class="form-control" placeholder="Enter Company Address"  />
-								          </div>
- -->
+
 
 								          <button class="submitfile btn btn-primary nextBtn btn-lg pull-right" type="submit" >Next</button>
 								        </div>
 								      </div>
+								       <table id="exceltable" class="col-xs-10 col-md-offset-0 table table-striped table-bordered table-hover" style="overflow-y: scroll;height: 600px;display: block;
+								    width: 100%;overflow-x: scroll;">
+										<thead>
+										</thead>
+										<tbody>
+										</tbody>
+										</table>
 								    </div>
 								    <div class="row setup-content" id="step-3">
-								      <div class="col-xs-6 col-md-offset-3">
-								        <div class="col-md-12">
-								          <h3> Step 3</h3>
-								          <button class="btn btn-success btn-lg pull-right" type="submit">Submit</button>
-								        </div>
-								      </div>
+								    
 								    </div>
 								 <!--  </form> -->
 								  <div class="row setup-content" id="step-4">
@@ -168,22 +159,9 @@
 							</div> <!-- /.col xs-12 -->
 						</div><!-- /.row -->
 					</form>	
-					<table id="exceltable" class="table table-striped table-bordered table-hover" style="overflow-y: scroll;height: 700px;display: none; width:100%; 
-    width: 984px;overflow-x: scroll;">
-
-                        <thead>
-                        
-                        </thead>
-
-                        <tbody>
-                          
-                      </tbody>
-
-                      </table>
+                 
 					</div><!-- /.page-content-area -->
-
 				</div><!-- /.page-content -->
-
 			</div><!-- /.main-container -->
 
 
@@ -247,12 +225,15 @@
 		<!-- import csv and preview -->
 <script type="text/javascript">  
    function ExportToTable() {  
+
        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;  
        //Checks whether the file is a valid csv file  
        if (regex.test($("#csv_file").val().toLowerCase())) {  
            //Checks whether the browser supports HTML5  
            if (typeof (FileReader) != "undefined") {  
+           
            	$("#exceltable").show();
+           	$(".previewbtn").hide();
                var reader = new FileReader();  
                reader.onload = function (e) {  
                    var table = $("#exceltable > tbody");  
@@ -271,8 +252,7 @@
                            table.append(row);  
                        }  
                    }  
-                   $('#csv_file').show();  
-               }  
+                   $('#exceltable').show();                 }  
               //reader.readAsText($("#csvfile").item(0));
               reader.readAsText($("#csv_file")[0].files[0]);  
            }  
@@ -290,6 +270,7 @@
 
 <script type="text/javascript">
     	$(document).ready(function () {
+    		$(".previewbtn").show();
     		$( ".submitfile" ).on( "click", function() {
     			$("#exceltable").hide();	
     		});

@@ -14,9 +14,6 @@ class OrderBatch extends Model
   protected $fillable = [ 'batch_id', 'first_name',	'last_name', 'title', 'phone_number', 'validation', 'disposition', 'address1', 'address2', 'health_status'];
 
 
-    public function batchDetail()
-  {
-    return $this->hasMany('App\BatchDetail');
-  }
+   
 
 }

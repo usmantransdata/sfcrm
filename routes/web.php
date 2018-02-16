@@ -97,6 +97,11 @@ Route::get('download-csv-client/{id}', function ($id) {
 
 });
 
+Route::get('sample-csv', function(){
+	$file = storage_path('/app/demo/sample_upload_file.csv');
+	return response()->download($file);
+});
+
 Route::get('completedBatch/{id}', 'ClientController@completedBatch')->name('completedBatch');
 
 Route::get('data.compare', function () {

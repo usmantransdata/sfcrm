@@ -30,13 +30,12 @@
                          <table id="sample-table-3" class="table table-striped table-bordered table-hover">
                         <thead>
                           <tr>
-                              <th class="center">
+                            <!--   <th class="center">
                                 <label class="position-relative"> 
                                   <input type="checkbox" class="ace" name="checkbox-top" />
                                   <span class="lbl"></span> 
                                 </label>
-                              </th>
-                            <th>Company Name</th>
+                              </th> -->
                              <th>Btach Name</th>
                              <th>Count</th>
                              <th>Proposed Due Date</th>
@@ -51,15 +50,14 @@
 
                             <tr>
 
-                              <td class="center">
+                             <!--  <td class="center">
                                 <label class="position-relative">
                                   
                                   <input type="checkbox" class="ace" value="" name="input[]" />
                                   <span class="lbl"></span>
                                   
                                 </label>
-                              </td>
-                              <td>{{$data->client->organization_name}}</td>
+                              </td> -->
                             <td>{{$data->batch_name}}</td>
                             <td>{{$data->total_record_count}}</td>
                             <td>{{$data->due_date}}</td>

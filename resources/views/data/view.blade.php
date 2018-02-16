@@ -289,6 +289,7 @@
                                     if(!in_array($value['client_id'], $output))
                                     {
                                    $output[] = $value['client_id']; 
+                                  // print_r($output);dd();
                                     }
                                   }
 
@@ -304,8 +305,7 @@
                             @if(is_null($manager))
                             @else
                           
-                          @if(in_array($data->client->id, $output))
-                    
+                       
                              @if($data->batchStatus->status == 'Pending')
                               @else
                             <tr>
@@ -319,7 +319,7 @@
                                 </label>
                               </td> -->
                                <td><span><a href="{{url('download-csv', $data->id)}}"><center><i class="fa fa-file-excel-o"></i></center></a></span></td>
-                              <td>{{$data->client->organization_name}}</td>
+                              <td>{{$data->client['company_name']}}</td>
 
                             <td>{{$data->batch_name}}</td>
                             <td>{{$data->total_record_count}}</td>
@@ -335,11 +335,9 @@
                                   
                                    @if($data->batchStatus->status == 'Submited')
                                   <td >
-                                     <a data-toggle="modal" data-id="{{$data->id}}" data-target="#inProcess" style="cursor: pointer;">
-                                      <button class="btn btn-primary btn-xs">
-                                           Start Processing
-                                      </button>
-                                    <br><br>
+                                     <a data-toggle="tooltip" title="Start Processing" data-id="{{$data->id}}" data-target="#inProcess" style="cursor: pointer;" class="btn btn-xs btn-success" onclick="openModel()">
+                                  <span class="glyphicon glyphicon-circle-arrow-right"></span>  
+                                   
                                     </a></td>
                                 
                                  @endif
@@ -355,12 +353,9 @@
 
                                   @if($data->batchStatus->status == 'QA-Review')
                                    <td >
-                                     <a style="cursor: pointer;" href="{{route('completedBatch', $data->id)}}">
-                                      <button class="btn btn-primary btn-xs"> 
-                                          Batch Completed 
-                                      </button>
-                                    <br><br>
-                                    </a></td>
+                                     <a class="btn btn-xs btn-success" style="cursor: pointer;" data-toggle="tooltip" title="Complete" href="{{route('completedBatch', $data->id)}}">
+                                      <span class="glyphicon glyphicon-ok"></span></a>
+                                    </td>
                                   @endif
                                    @if($data->batchStatus->status == 'Completed')
                                    <td ></td>
@@ -372,8 +367,6 @@
                            @endif
 
                       
-                        @endif
-
                         @endif
 
                         @endif
@@ -391,7 +384,7 @@
                                       </label>
                                     </td> -->
                                    <td><span><a href="{{url('download-csv', $data->id)}}"><center><i class="fa fa-file-excel-o"></i></center></a></span></td> 
-                                    <td>{{$data->client->organization_name}}</td>
+                                    <td>{{$data->client['company_name']}}</td>
                                   <td>{{$data->batch_name}}</td>
                                   <td>{{$data->total_record_count}}</td>
                                   <td><a href="#" data-toggle="tooltip" title="{{$data->instructions}}">
@@ -635,7 +628,9 @@
  <script src="{{ asset('/') }}public/aceadmin/assets/js/jquery.dataTables.min.js"></script>
     <script src="{{ asset('/') }}public/aceadmin/assets/js/jquery.dataTables.bootstrap.js"></script>
 <script>
+ 
 $(document).ready(function(){
+
     $('[data-toggle="tooltip"]').tooltip();   
 });
 </script> 

@@ -54,25 +54,7 @@
                                 </label>
                                 </div>
                              </div>  
-                          <div class="col-lg-6 col-lg-offset-3">
-                         <div class="form-group{{ $errors->has('notes') ? ' has-error' : '' }}">
-                          <label class="block clearfix">Special Notes
-                            <span class="block input-icon input-icon-right">
-                        
-
-                               <textarea id="notes" type="text" class="form-control" name="notes" class="form-control" >{{  $batchEdit->instructions }}</textarea>
-
-                                @if ($errors->has('notes'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('notes') }}</strong>
-                                    </span>
-                                @endif
-                              
-                              <i class="ace-icon fa fa-user"></i>
-                            </span>
-                          </label>
-                          </div>
-                        </div>
+                         
                         <div class='col-lg-6 col-lg-offset-3'>    
                             <div class="form-group{{ $errors->has('due_date') ? ' has-error' : '' }}">
                           <label class="block clearfix">Proposed Due Date<span style="color: red";>*</span>
@@ -85,7 +67,24 @@
                                     </span>
                                 @endif
                               
-                              <i class="ace-icon fa fa-user"></i>
+                              <i class="ace-icon fa fa-calendar"></i>
+                            </span>
+                          </label>
+                          </div>
+                        </div>
+                         <div class="col-lg-6 col-lg-offset-3">
+                         <div class="form-group{{ $errors->has('notes') ? ' has-error' : '' }}">
+                          <label class="block clearfix">Special Notes
+                            <span class="block input-icon input-icon-right">
+                        
+
+                               <textarea id="notes" type="text" class="form-control" name="notes" class="form-control" >{{  $batchEdit->instructions }}</textarea>
+
+                                @if ($errors->has('notes'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('notes') }}</strong>
+                                    </span>
+                                @endif
                             </span>
                           </label>
                           </div>

@@ -111,7 +111,7 @@ class RegisterController extends Controller
     {   
       
             Auth::loginUsingId($user->id);
-            return redirect()->route('backend');
+            return redirect()->to('viewData');
        
       // return $this->guard()->login($user);
     }

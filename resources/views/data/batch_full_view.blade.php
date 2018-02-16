@@ -59,7 +59,7 @@
                            
                             <td>{{$data->last_name}}</td>
                              <td>{{ $data->title }}</td>
-                             <td>{{ $data->phone_number }}</td>
+                             <td>{{ $data->phone_number1 }}</td>
                              <td>{{ $data->validation }}</td>
                              <td>{{ $data->disposition }}</td>
                              <td>{{ $data->organization }}</td>

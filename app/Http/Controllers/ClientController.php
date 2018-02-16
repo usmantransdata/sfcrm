@@ -98,7 +98,7 @@ class ClientController extends Controller
                     $cols['phone_number3'] =$value[$input['phone_number3']];
                     $cols['address1'] =$value[$input['address1']];
                     $cols['address2'] =$value[$input['address2']];
-                    $cols['address3'] =$value[$input['address3']];
+                    //$cols['address3'] =$value[$input['address3']];
                     $cols['city'] =$value[$input['city']];
                     $cols['state'] =$value[$input['state']];
                     $cols['zip'] =$value[$input['zip']];
@@ -177,7 +177,7 @@ class ClientController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             //'phone_number' => 'required|regex:/(01)[0-9]{9}'
-            'phone_number' => 'required|regex:/(01)[0-9]{9}/'
+           // 'phone_number' => 'required|regex:/(01)[0-9]{9}/'
 
           ]); 
 
@@ -255,7 +255,7 @@ class ClientController extends Controller
     //
     public function completedBatch($id){
 
-      $completedBatch = OrderBatch::where('batch_id', '=', $id)->get();
+      $completedBatch = CotentBatch::where('batch_id', '=', $id)->get();
 
       return view('data.completeData', compact('completedBatch'));
     }
@@ -421,15 +421,11 @@ return redirect()->route('viewData');
 
         
     }
-
+/*
     public function importExcel(Request $request)
     {  
-
-          
-              $cols = array();
+           $cols = array();
              $input = $request->all();
-                 //  print_r(Input::get('company'));dd();
-            // dd($request); 
           if($request->hasFile('import_file')){
 
            Excel::load($request->file('import_file')->getRealPath(), function ($reader) {
@@ -442,19 +438,11 @@ return redirect()->route('viewData');
                 $batch_detail->batch_name = Input::get('batch_name');
                 $batch_detail->status_id = 1;
                 $batch_detail->instructions = Input::get('instructions');
-              //  $batch_detail->total_record_count = count();
-               // $batch_detail->total_record_count = count();
-              //  dd($batch_detail);
                $batch_detail->save();
 
                 foreach ($reader->toArray() as $key => $value) {
-                   // print_r($row);dd();
-                   /*foreach ($row as $value) {*/
-                   // print_r($value);dd();
-                    $count++;
-                   /* echo "<pre>";
-                    print_r($value);dd();*/
-                    $cols['batch_id'] = $batch_detail->id;
+                   $count++;
+                  $cols['batch_id'] = $batch_detail->id;
                     $cols['first_name'] = $value['first_name'];
                     $cols['last_name'] = $value['last_name'];
                     $cols['title'] = $value['title'];
@@ -476,14 +464,12 @@ return redirect()->route('viewData');
                     $cols['organization'] = $value['organization'];
                     $cols['address1'] = $value['state'];
                     $cols['address2'] = $value['country'];
-                   // $cols['health_status'] = $value['health_status'];
-                   // print_r($cols);dd();
+               
                     if(!empty($cols)) {
 
                      $data = OrderBatch::create($cols);
-                     //DB::table('order_batch')->insert($cols);                    
                     }
-                   /*}*/
+                 
                   
                 }
                 BatchDetail::where('id', $batch_detail->id)->update(array('total_record_count' => $count));
@@ -501,7 +487,7 @@ return redirect()->route('viewData');
 
          
 
-    }
+    }*/
 
     public function assignCompany(Request $request){
         

@@ -54,7 +54,7 @@
                         <thead>
                           <tr>
 
-                              <th class="center">
+                            <!--   <th class="center">
                                 <label class="position-relative">
                                    
                                   <input type="checkbox" class="ace" name="checkbox-top" />
@@ -62,7 +62,7 @@
                                   <span class="lbl"></span> 
                                  
                                 </label>
-                              </th>
+                              </th> -->
                            <th>Company</th> 
                              <th>Name</th>
                              <th>Email</th>
@@ -81,14 +81,14 @@
                              @foreach($client_info as $users)
                             <tr>
 
-                              <td class="center">
+                            <!--   <td class="center">
                                 <label class="position-relative">
                                   
                                   <input type="checkbox" class="ace" value="" name="input[]" />
                                   <span class="lbl"></span>
                                   
                                 </label>
-                              </td>
+                              </td> -->
 
                      <td>{{ $users->organization_name }}</td> 
                             <td>{{ ucwords($users->contact_first_name)}} {{ucwords($users->contact_last_name) }}</td>
