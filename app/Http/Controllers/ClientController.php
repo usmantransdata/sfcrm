@@ -117,6 +117,14 @@ class ClientController extends Controller
       
       
     }
+    public  function get_contentbatch_columns(Request $request){
+      $input = $request->all(); 
+      print_r($input);
+      $contentbatch = new CotentBatch;
+
+      dd();
+    return $tablecolums = $contentbatch->getTableColumns(); 
+    }
     public function readcsv(Request $request)
     {
     
