@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
   @include('layouts.header')
-  @include('layouts.sidebar')
 
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 
@@ -10,13 +9,70 @@
             <script type="text/javascript">
               try{ace.settings.check('main-container' , 'fixed')}catch(e){}
             </script>
+                 <div id="sidebar" class="sidebar      h-sidebar                navbar-collapse collapse">
+                 <script type="text/javascript">
+                   try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+                 </script>
+
+                        <ul class="nav nav-list">
+
+                            <li class="open hover">
+                              <a href="{{route('dashboard')}}">
+                                 <i class="menu-icon fa fa-tachometer bigger-170"></i>
+                                <span class="menu-text">Dashboard</span>
+
+                                <b class="arrow fa fa-angle-down"></b>
+                              </a>
+                            </li>
+
+                           <li class="open hover">
+                             <a href="{{route('client.index')}}">
+                                <i class="menu-icon fa fa-plus-square-o bigger-170"></i>
+                               <span class="menu-text"> Create Client</span>
+
+                               <b class="arrow fa fa-angle-down"></b>
+                             </a>
+                           </li>
+
+                            <li class="open hover">
+                             <a href="{{route('client.view')}}">
+                               <i class="menu-icon fa fa-cogs bigger-170"></i>
+                               <span class="menu-text"> Manage Clients </span>
+                             </a>
+
+                             <b class="arrow"></b>
+                           </li>
+                           
+                            <li class="open hover">
+                             <a href="{{route('user')}}">
+                                <i class="menu-icon fa fa-plus-square-o bigger-170"></i>
+                               <span class="menu-text"> Creates Users</span>
+
+                               <b class="arrow fa fa-angle-down"></b>
+                             </a>
+                           </li>
+
+                            <li class="active hover">
+                             <a href="{{route('userView')}}">
+                                <i class="menu-icon fa fa-cogs bigger-170"></i>
+                               <span class="menu-text"> Manage Users</span>
+
+                               <b class="arrow fa fa-angle-down"></b>
+                             </a>
+                           </li>
+                                             
+            </ul><!-- /.nav-list -->
+
+                 <!-- #section:basics/sidebar.layout.minimize -->
+                 <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+                   <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+                 </div>
+                  <script type="text/javascript">
+                   try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+                 </script>
+               </div>
               <div class="page-content">
                 <div class="page-content-area">
-                  <div class="page-header">
-                    <h1>
-                      Users List
-                    </h1>
-                  </div><!-- /.page-header -->
                    @if (session('flash_message'))
                       <div class="alert alert-success">
                           {{ session('flash_message') }}
@@ -39,25 +95,18 @@
                             {{csrf_field()}}
                             <div class="row">
                        <div>
-
+                       <div style="width:80%;margin-left:10%;margin-right:10%">
+                       
+                           <div class="table-header">
+                         List of Client(s):                    </div>
                          <table id="sample-table-3" class="table table-striped table-bordered table-hover">
 
                         <thead>
-                          <tr>
-
-                              <!-- <th class="center">
-                                <label class="position-relative">
-                                   
-                                  <input type="checkbox" class="ace" name="checkbox-top" />
-
-                                  <span class="lbl"></span> 
-                                 
-                                </label>
-                              </th> -->
-                             <th>Name</th>
+                          <tr >
+                             <th >Name</th>
                              <th>Email</th>
                               <th>User Type</th>   
-                              <th>Change Status</th>
+                              <th>Acount Active/Deactive</th>
                                 <th>Action</th>
                               </tr>
                         </thead>
@@ -69,47 +118,46 @@
                              @if($users->role_id != 1)
                             <tr>
 
-                             <!--  <td class="center">
-                                <label class="position-relative">
-                                  
-                                  <input type="checkbox" class="ace" value="" name="input[]" />
-                                  <span class="lbl"></span>
-                                  
-                                </label>
-                              </td>
- -->
                             <td>{{ ucwords($users->first_name) }} {{ ucwords($users->last_name) }}</td>
                             <td>{{ $users->email  }}</td>
                            
                             <td>{{$users->roles->role}}</td>
 
-                            @if($users->acount_status == 0)
+                           
 
                             <td>
+                               @if($users->acount_status == 0)
                                <center>
 
-                                 <input type="checkbox" data-toggle="toggle" data-on="Enabled" data-off="Disabled" data-width="100" data-height="10" class="switchToggle" data-id="{{$users->id}}">
-                        
+                                 <!-- <input type="checkbox" data-toggle="toggle" data-on="Enabled" data-off="Disabled" data-width="100" data-height="10" class="switchToggle" data-id="{{$users->id}}"> -->
+                          <input id="id-button-borders" type="checkbox" class="ace ace-switch ace-switch-4 switchToggle"  value="{{$users->id}}"/>
+                          <span class="lbl middle"></span>
                  
                           </center>
-                          </td>
+                         
                           @else
-                             <td>
                               <center>
 
-                                <input type="checkbox" data-toggle="toggle" data-on="Enabled" data-off="Disabled" data-width="100" data-height="10" class="switchToggle" data-id="{{$users->id}}" checked>
+                                <input id="id-button-borders" checked="checked" type="checkbox" class="ace ace-switch ace-switch-5 switchToggle"  value="{{$users->id}}" />
+                                <span class="lbl middle"></span>
+                               <!--  <input type="checkbox" data-toggle="toggle" data-on="Enabled" data-off="Disabled" data-width="100" data-height="10" class="switchToggle" data-id="{{$users->id}}" checked> -->
                           
                             </center>
-                          </td>
+                         
                           
                           @endif
+                           </td>
+
                           <td>
-                              <a href="{{route('userEdit', $users->id)}}">
-                             <i class="fa fa-pencil-square-o bigger-200" aria-hidden="true"></i>
+                            <center>
+                              <a href="{{route('userEdit', $users->id)}}" class="green">
+                            <i class="ace-icon fa fa-pencil bigger-130"></i>
                            </a>
 
-                                <a data-toggle="modal" data-id="{{$users->id}}" data-target="#myModal" style="cursor: pointer;">
-                                <i class="fa fa-trash-o bigger-200" aria-hidden="true"></i></a>
+                               <!--  <a data-toggle="modal" data-id="{{$users->id}}" data-target="#myModal" href="#" class="red">
+                               <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                </a></a> -->
+                                </center>
                             </td>
                         </tr>
                         @endif
@@ -117,9 +165,6 @@
                       </tbody>
 
                       </table>
-
-
-                       
                   </div>
                   </div><!-- /.span -->
                 </form>
@@ -213,6 +258,7 @@
 
 @include('layouts.footer')
 
+</style>
  <script src="{{ asset('/') }}public/aceadmin/assets/js/jquery.dataTables.min.js"></script>
     <script src="{{ asset('/') }}public/aceadmin/assets/js/jquery.dataTables.bootstrap.js"></script>
 
@@ -224,18 +270,19 @@
 
   $('.switchToggle').on('change', function(){
      var value = this.checked;
-     var id =  $(this).data("id");
+     var id =  $('.switchToggle').val();
          
       
       if(value == true){
-     // alert();
+      //alert($(this).val());
           $('#userActivate').modal('show'); 
-          $(".modal-body #enable").val( id );
+          $(".modal-body #enable").val( $(this).val() );
         
       }else
       {
+        //alert($(this).val());
           $('#userDeactivate').modal('show'); 
-          $(".modal-body #disable").val( id );
+          $(".modal-body #disable").val( $(this).val() );
       }
     });
 

@@ -2,15 +2,12 @@
 <html lang="en">
   @include('layouts.header')
 
-  @if(auth::user()->role_id != 5 || auth::user()->role_id != 2)
-  @else
-  @include('layouts.sidebar')
-  @endif
   <body class="no-skin">
           <div class="main-container" id="main-container">
             <script type="text/javascript">
               try{ace.settings.check('main-container' , 'fixed')}catch(e){}
             </script>
+            
               <div class="page-content">
                 <div class="page-header">
                   <a href="{{ URL::previous() }}">
@@ -32,19 +29,30 @@
                             {{csrf_field()}}
                             <div class="row">
                        <div>
-                        <table id="sample-table-3" class="table table-striped table-bordered table-hover">
+                        <table id="sample-table-3" class="table table-striped table-bordered table-hover" style="overflow-y: scroll;height: 100%;display: block;
+    width: 100%;overflow-x: scroll;">
                            <thead>
                           <tr>
 
                              <th>First Name</th>
                              <th>Last Name</th>
+                             <th>Company Name</th>
                              <th>Title</th>
-                              <th>Phone Number</th>
-                              <th>Validation</th>
-                              <th>Disposition</th>
-                              <th>Organization</th>
+                             <th>Email1</th>
+                             <th>Email2</th>
+                             <th>Email3</th>
+                              <th>Phone Number1</th>
+                              <th>Phone Number2</th>
+                              <th>Phone Number3</th>
                               <th>Adress1</th>
                               <th>Adress2</th>
+                              <th>Adress3</th>
+                              <th>City</th>
+                              <th>State</th>
+                              <th>Zip</th>
+                              <th>Country</th>
+                              <th>Disposition</th>
+                              <th>Validation</th>
                               <th>Health</th>
                               </tr>
                         </thead>
@@ -56,15 +64,24 @@
                             <tr>
 
                             <td>{{ $data->first_name  }}</td>
-                           
                             <td>{{$data->last_name}}</td>
-                             <td>{{ $data->title }}</td>
-                             <td>{{ $data->phone_number1 }}</td>
-                             <td>{{ $data->validation }}</td>
-                             <td>{{ $data->disposition }}</td>
-                             <td>{{ $data->organization }}</td>
-                             <td>{{ $data->address1 }}</td>
-                             <td>{{ $data->address2 }}</td>
+                            <td>{{$data->company_name}}</td>
+                            <td>{{$data->title}}</td>
+                            <td>{{$data->email1}}</td>
+                            <td>{{$data->email2}}</td>
+                            <td>{{$data->email3}}</td>
+                            <td>{{$data->phone_number1}}</td>
+                            <td>{{$data->phone_number2}}</td>
+                            <td>{{$data->phone_number3}}</td>
+                            <td>{{$data->address1}}</td>
+                            <td>{{$data->address2}}</td>
+                            <td>{{$data->address3}}</td>
+                            <td>{{$data->city}}</td>
+                            <td>{{$data->state}}</td>
+                            <td>{{$data->zip}}</td>
+                            <td>{{$data->country}}</td>
+                            <td>{{$data->disposition}}</td>
+                            <td>{{$data->validation}}</td>
                              @if($data->health_status=='Good Record')
                              <td class="text-success">{{$data->health_status}}</td>
                              @else
@@ -97,7 +114,11 @@
           
 
 @include('layouts.footer')
+<style type="text/css">
+  
 
+
+</style>
  <script src="{{ asset('/') }}public/aceadmin/assets/js/jquery.dataTables.min.js"></script>
     <script src="{{ asset('/') }}public/aceadmin/assets/js/jquery.dataTables.bootstrap.js"></script>
 

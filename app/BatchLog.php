@@ -10,5 +10,5 @@ class BatchLog extends Model
 
     	public $timestamps = false;
 
-   // protected $fillable = [ 'batch_status_id', 'status_change_date', ''];
+    protected $fillable = [ 'batch_status_id', 'batch_id', 'status_change_date'];
 }

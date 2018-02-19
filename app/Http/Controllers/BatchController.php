@@ -110,7 +110,9 @@ class BatchController extends Controller
      */
     public function show($id)
     {
+       // print_r($id);dd();
         $batchEdit = BatchDetail::find($id);
+       // print_r($batchEdit);dd();
         return view('data.batch_edit', compact('batchEdit'));
        // echo "string";dd();
     }

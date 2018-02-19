@@ -30,7 +30,7 @@ class HomeController extends Controller
                         return view('index', compact('orderBatch'));
                 }else
                 {
-                    return redirect()->back();
+                    return redirect()->to('viewData');
                 }
             }
         

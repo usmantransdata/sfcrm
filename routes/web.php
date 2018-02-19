@@ -19,6 +19,11 @@ Auth::routes();
 
 Route::group(['middleware' => 'auth'], function () {
 
+
+Route::fallback(function(){
+    return 'Sorry you could not reach this page';
+})->name('fallback');
+
 Route::post('userActivate', 'AdminController@userActivate')->name('userActivate');	
 
 
@@ -28,7 +33,7 @@ Route::post('import_process', 'ClientController@processImport')->name('import_pr
 
 Route::post('user_signup', 'AdminController@signup')->name('user_signup');
 
-Route::get('backend', 'HomeController@index')->name('backend');
+Route::get('dashboard', 'HomeController@index')->name('dashboard');
 Route::post('readcsv', 'ClientController@readcsv')->name('readcsv');
 
 Route::get('user', 'AdminController@addUsers')->name('user');
@@ -78,13 +83,27 @@ Route::get('statusChangedManager/{id}', 'BatchDetailController@statusChangedMana
 Route::get('download-csv/{id}', function ($id) {
 
 //echo "string";dd();
-	$batch = \App\OrderBatch::where('batch_id', '=', $id)->get();
+	$batch = \App\CotentBatch::where('batch_id', '=', $id)->get();
 	//print_r($batch);dD();
 	$csvExporter = new \Laracsv\Export();
 
-	return $csvExporter->build($batch, ['id', 'batch_id', 'first_name', 'last_name', 'title', 'phone_number', 'validation', 'disposition', 'organization', 'address1', 'address2', 'health_status'])->download();
+	return $csvExporter->build($batch, ['id', 'batch_id', 'first_name', 'last_name', 'company_name', 'title', 'email1', 'email2', 'email3', 'phone_number1', 'phone_number2', 'phone_number3', 'address1', 'address2', 'address3', 'city', 'state', 'zip', 'country', 'disposition', 'validation', 'health_status'])->download();
 
 });
+
+Route::get('organization_name_check', function(){
+
+	$user = DB::table('client')->pluck('organization_name');
+	return $user;
+	//print_r($user);dd();
+})->name('organization_name_check');
+
+Route::get('email_check', function(){
+
+	$user = DB::table('users')->pluck('email');
+	return $user;
+	//print_r($user);dd();
+})->name('email_check');
 
 Route::get('download-csv-client/{id}', function ($id) {
 

@@ -48,7 +48,7 @@
         <!-- /section:basics/sidebar.mobile.toggle -->
         <div class="navbar-header pull-left">
           <!-- #section:basics/navbar.layout.brand -->
-           @if(auth::user()->role_id != 1 and auth::user()->role_id != 2 and auth::user()->role_id != 4)
+          <!--  @if(auth::user()->role_id != 1 and auth::user()->role_id != 2 and auth::user()->role_id != 4)
               <a href="{{route('viewData')}}" class="navbar-brand">
                 <small>
                  <i class="fa fa-leaf"></i>
@@ -60,8 +60,11 @@
               <i class="fa fa-leaf"></i>
                  <span>Trans Data</span>
                </a>
-              @endif
-           
+              @endif -->
+             <a href="#" class="navbar-brand">
+              <i class="fa fa-leaf"></i>
+                 <span>Trans Data</span>
+               </a>
          
         </div>
 

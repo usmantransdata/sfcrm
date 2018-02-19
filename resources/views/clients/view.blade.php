@@ -1,32 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
   @include('layouts.header')
-  @include('layouts.sidebar')
   <body class="no-skin">
           <div class="main-container" id="main-container">
             <script type="text/javascript">
               try{ace.settings.check('main-container' , 'fixed')}catch(e){}
             </script>
+                 <div id="sidebar" class="sidebar      h-sidebar                navbar-collapse collapse">
+                 <script type="text/javascript">
+                   try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+                 </script>
 
-        <!-- #section:basics/content.breadcrumbs -->
-       <!--  <div class="breadcrumbs" id="breadcrumbs">
+                         <ul class="nav nav-list">
 
-          <ul class="breadcrumb">
-            <li>
-              <i class="ace-icon fa fa-home home-icon"></i>
-              <a href="#">Home</a>
-            </li>
-            <li class="active">Dashboard</li>
-          </ul>
-        </div>   -->
+                            <li class="open hover">
+                              <a href="{{route('dashboard')}}">
+                                 <i class="menu-icon fa fa-tachometer bigger-170"></i>
+                                <span class="menu-text">Dashboard</span>
+
+                                <b class="arrow fa fa-angle-down"></b>
+                              </a>
+                            </li>
+
+                           <li class="open hover">
+                             <a href="{{route('client.index')}}">
+                                <i class="menu-icon fa fa-plus-square-o bigger-170"></i>
+                               <span class="menu-text"> Create Client</span>
+
+                               <b class="arrow fa fa-angle-down"></b>
+                             </a>
+                           </li>
+
+                            <li class="active hover">
+                             <a href="{{route('client.view')}}">
+                                <i class="menu-icon fa fa-cogs bigger-170"></i>
+                               <span class="menu-text"> Manage Clients </span>
+                             </a>
+
+                             <b class="arrow"></b>
+                           </li>
+                           
+                            <li class="open hover">
+                             <a href="{{route('user')}}">
+                                <i class="menu-icon fa fa-plus-square-o bigger-170"></i>
+                               <span class="menu-text"> Creates Users</span>
+
+                               <b class="arrow fa fa-angle-down"></b>
+                             </a>
+                           </li>
+
+                            <li class="open hover">
+                             <a href="{{route('userView')}}">
+                                 <i class="menu-icon fa fa-cogs bigger-170"></i>
+                               <span class="menu-text"> Manage Users</span>
+
+                               <b class="arrow fa fa-angle-down"></b>
+                             </a>
+                           </li>
+                                             
+            </ul><!-- /.nav-list -->
+
+                 <!-- #section:basics/sidebar.layout.minimize -->
+                 <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+                   <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+                 </div>
+                   <!-- /section:basics/sidebar.layout.minimize -->
+                 <script type="text/javascript">
+                   try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+                 </script>
+               </div>
 
               <div class="page-content">
                 <div class="page-content-area">
-                  <div class="page-header">
-                    <h1>
-                      Manage Clients
-                    </h1>
-                  </div><!-- /.page-header -->
                    @if (session('flash_message'))
                       <div class="alert alert-success">
                           {{ session('flash_message') }}
@@ -47,28 +92,17 @@
                          <form method="post" action="">
                             {{csrf_field()}}
                             <div class="row">
-                       <div>
-
+                        <div style="width:80%;margin-left:10%;margin-right:10%">
+                       
+                          <div class="table-header">List of Client(s):                    </div>
                          <table id="sample-table-3" class="table table-striped table-bordered table-hover">
 
                         <thead>
                           <tr>
-
-                            <!--   <th class="center">
-                                <label class="position-relative">
-                                   
-                                  <input type="checkbox" class="ace" name="checkbox-top" />
-
-                                  <span class="lbl"></span> 
-                                 
-                                </label>
-                              </th> -->
-                           <th>Company</th> 
+                            <th>Company</th> 
                              <th>Name</th>
                              <th>Email</th>
                              <th>Phone Number</th>
-                           <!--   <th>Address</th>
-                              <th>Created_at</th> -->
                               <th>Manager</th>
                               <th>Assign</th>
                               <th>Action</th>
@@ -81,22 +115,11 @@
                              @foreach($client_info as $users)
                             <tr>
 
-                            <!--   <td class="center">
-                                <label class="position-relative">
-                                  
-                                  <input type="checkbox" class="ace" value="" name="input[]" />
-                                  <span class="lbl"></span>
-                                  
-                                </label>
-                              </td> -->
-
                      <td>{{ $users->organization_name }}</td> 
                             <td>{{ ucwords($users->contact_first_name)}} {{ucwords($users->contact_last_name) }}</td>
                             <td>{{ $users->contact_person_email  }}</td>
                             <td>{{ $users->contact__person_phoneNumber }}</td>
-                           <!--  <td>{{ $users->country}}</td>
-                             <td>{{ $users->created_at }}</td> -->
-                             @if( ! empty($users->CompanyManager->user_id))
+                         @if( ! empty($users->CompanyManager->user_id))
                               <?php
                            $manager = App\User::where('id', '=', $users->CompanyManager->user_id)->get();
                               ?>
@@ -109,7 +132,8 @@
                                 
                               <center>
                                 <a href="{{route('clientFullView' , $users->id)}}" >
-                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                <i class="ace-icon fa fa-eye bigger-130"></i>
+
                                 </a>
                               </center>
                             </td>

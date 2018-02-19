@@ -1,23 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
   @include('layouts.header')
-  @include('layouts.sidebar')
 
   <body class="no-skin">
           <div class="main-container" id="main-container">
             <script type="text/javascript">
               try{ace.settings.check('main-container' , 'fixed')}catch(e){}
             </script>
+
+                 <div id="sidebar" class="sidebar      h-sidebar                navbar-collapse collapse">
+                 <script type="text/javascript">
+                   try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+                 </script>
+
+                         <ul class="nav nav-list">
+                          
+                          <li class="open hover">
+                            <a href="{{route('dashboard')}}">
+                               <i class="menu-icon fa fa-tachometer bigger-170"></i>
+                              <span class="menu-text">Dashboard</span>
+
+                              <b class="arrow fa fa-angle-down"></b>
+                            </a>
+                          </li>
+
+                           <li class="open hover">
+                             <a href="{{route('client.index')}}">
+                                <i class="menu-icon fa fa-plus-square-o bigger-170"></i>
+                               <span class="menu-text"> Create Client</span>
+
+                               <b class="arrow fa fa-angle-down"></b>
+                             </a>
+                           </li>
+
+                            <li class="active hover">
+                             <a href="{{route('client.view')}}">
+                                <i class="menu-icon fa fa-cogs bigger-170"></i>
+                               <span class="menu-text"> Manage Clients </span>
+                             </a>
+
+                             <b class="arrow"></b>
+                           </li>
+                           
+                            <li class="open hover">
+                             <a href="{{route('user')}}">
+                                <i class="menu-icon fa fa-plus-square-o bigger-170"></i>
+                               <span class="menu-text"> Creates Users</span>
+
+                               <b class="arrow fa fa-angle-down"></b>
+                             </a>
+                           </li>
+
+                            <li class="open hover">
+                             <a href="{{route('userView')}}">
+                                 <i class="menu-icon fa fa-cogs bigger-170"></i>
+                               <span class="menu-text"> Manage Users</span>
+
+                               <b class="arrow fa fa-angle-down"></b>
+                             </a>
+                           </li>
+                                             
+            </ul><!-- /.nav-list -->
+
+                 <!-- #section:basics/sidebar.layout.minimize -->
+                 <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+                   <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+                 </div>
+                   <!-- /section:basics/sidebar.layout.minimize -->
+                 <script type="text/javascript">
+                   try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+                 </script>
+               </div>
               <div class="page-content">
                 <div class="page-content-area">
-                  <div class="page-header">
-                    <h1>
-                    CLIENT VIEW
-                    </h1>
-                    <a href="{{ url()->previous() }}" class="col-lg-8 col-lg-offset-2" style="margin-top: -30px">
-                     <i class="fa fa-arrow-left btn-lg" aria-hidden="true"></i>
-                    </a>
-                  </div><!-- /.page-header -->
                   <div class="row">
                     <div class="col-lg-12">
                         
@@ -30,6 +85,15 @@
                     
         <!--      <form action="{{route('client.store')}}" method="POST" >
                       {{ csrf_field() }} -->
+               <!--    <div style="margin-top: 20px">
+                   <a href="{{ url()->previous() }}" class="col-lg-8 col-lg-offset-2" style="margin-top: -30px">
+                     <i class="fa fa-arrow-left btn-lg" aria-hidden="true"></i>
+                    </a>
+                  </div>    --> 
+                  <div class="panel panel-primary" style="width:80%;margin-left:10%;margin-right:10%">
+                               
+                    <div class="panel-heading "><h4>Batch View</h4></div>
+                    <div class="panel-body">
 
                <fieldset class="form-group col-lg-8 col-lg-offset-2" style="border: 1px solid">
                 <legend>Company Info</legend>
@@ -263,7 +327,7 @@
                        <!--  </form> -->
 
             </div>
-
+</div>
                     </div><!-- /.col -->
                   </div><!-- /.row -->
                 </div><!-- /.page-content-area -->

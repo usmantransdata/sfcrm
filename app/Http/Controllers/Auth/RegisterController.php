@@ -32,7 +32,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/backend';
+    protected $redirectTo = '/dashboard';
 
    
     /**

@@ -1,23 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
   @include('layouts.header')
-  @include('layouts.sidebar')
 
   <body class="no-skin">
           <div class="main-container" id="main-container">
             <script type="text/javascript">
               try{ace.settings.check('main-container' , 'fixed')}catch(e){}
             </script>
+                 <div id="sidebar" class="sidebar      h-sidebar                navbar-collapse collapse">
+                 <script type="text/javascript">
+                   try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+                 </script>
+
+                        <ul class="nav nav-list">
+                          
+                          <li class="open hover">
+                            <a href="{{route('dashboard')}}">
+                               <i class="menu-icon fa fa-tachometer bigger-170"></i>
+                              <span class="menu-text">Dashboard</span>
+
+                              <b class="arrow fa fa-angle-down"></b>
+                            </a>
+                          </li>
+                          
+                           <li class="open hover">
+                             <a href="{{route('client.index')}}">
+                                 <i class="menu-icon fa fa-plus-square-o bigger-170"></i>
+                               <span class="menu-text"> Create Client</span>
+
+                               <b class="arrow fa fa-angle-down"></b>
+                             </a>
+                           </li>
+
+                            <li class="open hover">
+                             <a href="{{route('client.view')}}">
+                               <i class="menu-icon fa fa-cogs bigger-170"></i>
+                               <span class="menu-text"> Manage Clients </span>
+                             </a>
+
+                             <b class="arrow"></b>
+                           </li>
+                           
+                            <li class="active hover">
+                             <a href="{{route('user')}}">
+                                 <i class="menu-icon fa fa-plus-square-o bigger-170"></i>
+                               <span class="menu-text"> Creates Users</span>
+
+                               <b class="arrow fa fa-angle-down"></b>
+                             </a>
+                           </li>
+
+                            <li class="open hover">
+                             <a href="{{route('userView')}}">
+                                <i class="menu-icon fa fa-cogs bigger-170"></i>
+                               <span class="menu-text"> Manage Users</span>
+
+                               <b class="arrow fa fa-angle-down"></b>
+                             </a>
+                           </li>
+                                             
+            </ul><!-- /.nav-list -->
+
+                 <!-- #section:basics/sidebar.layout.minimize -->
+                 <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+                   <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+                 </div>
+                  <script type="text/javascript">
+                   try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+                 </script>
+               </div>
               <div class="page-content">
                 <div class="page-content-area">
-                  <div class="page-header">
-                    <h1>
-                      Add Users
-                     <!--  <small>
-                        <i class="ace-icon fa fa-angle-double-right"></i>
-                        Add Users
-                      </small> -->
-                    </h1>
                   </div><!-- /.page-header -->
                   <div class="row">
                     <div class="col-xs-12">
@@ -32,11 +85,13 @@
                             {{ session('warning') }}
                         </div>
                     @endif
-            <div class='col-lg-4 col-lg-offset-4'>
+            <div class='col-lg-8 col-lg-offset-2'>
 
              <!--  <h1><i class='fa fa-user-plus'></i> Add User</h1>
                         <hr> -->
-
+         <div class="panel panel-primary ">
+           <div class="panel-heading "><h4>Add Users</h4></div>
+           <div class="panel-body">               
                   <form action="{{route('user_signup')}}" method="POST" id="form">
                     {{csrf_field()}}
 
@@ -98,6 +153,7 @@
                                         <strong>{{ $errors->first('email') }}</strong>
                                     </span>
                                 @endif
+                                <span id="emailResults"></span>
                             <i class="ace-icon fa fa-envelope"></i>
                             </span>
                           </label>
@@ -132,7 +188,8 @@
 
                     <button type="submit" class="btn btn-primary pull-right">Save</button>
                   </form>
-
+                </div>
+              </div>
             </div>
 
                     </div><!-- /.col -->
@@ -219,7 +276,39 @@ function checkPasswordMatch() {
 
 $(document).ready(function () {
    $("#password-confirm").keyup(checkPasswordMatch);
-});     
+});   
+
+$( "#email" ).change(function() {
+      $("#emailResults").text("");
+  var email = $("#email").val();
+  if (validateEmail(email)) {
+                $.ajax({
+                   url: "{{route('email_check')}}",
+                   type: 'get',
+                   //data: 'organization_name=' + username,
+                   success: function(result){
+                    // alert();
+                    if ($.inArray($("#email").val(), result) >= 0) {
+                        $("#emailResults").text(email + " is already used please try another");
+                       $("#emailResults").css("color", "red");
+                    }else{
+                                   $("#emailResults").text(email + "is valid");
+                                   $("#emailResults").css("color", "green");
+                              }
+                            }
+                   });
+
+  } else {
+    $("#emailResults").text(email + " is not valid");
+    $("#emailResults").css("color", "red");
+  }
+  return false;
+}); 
+
+function validateEmail(email) {
+  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+}
    </script>
   </body>
 </html>

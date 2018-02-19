@@ -2,43 +2,52 @@
 <html lang="en">
   @include('layouts.header')
 
-  @if(auth::user()->role_id != 5 || auth::user()->role_id != 2)
-
-  @else
-  @include('layouts.sidebar')
-  @endif
   <body class="no-skin">
           <div class="main-container" id="main-container">
             <script type="text/javascript">
               try{ace.settings.check('main-container' , 'fixed')}catch(e){}
             </script>
+              @if(auth::user()->role_id == 5)
+                
+                <div id="sidebar" class="sidebar      h-sidebar                navbar-collapse collapse">
+              <script type="text/javascript">
+                try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+              </script>
+
+                      <ul class="nav nav-list">
+                        <li class="active hover">
+                          <a href="{{route('viewData')}}">
+                            <i class="menu-icon fa fa-tachometer"></i>
+                            <span class="menu-text"> Dashboard </span>
+                          </a>
+
+                          <b class="arrow"></b>
+                        </li>
+
+                        <li class="open hover">
+                          <a href="{{route('data_upload')}}">
+                             <i class="menu-icon fa fa-cog"></i>
+                            <span class="menu-text"> Upload Data </span>
+
+                            <b class="arrow fa fa-angle-down"></b>
+                          </a>
+                        </li>
+                                          
+         </ul><!-- /.nav-list -->
+
+              <!-- #section:basics/sidebar.layout.minimize -->
+              <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+                <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+              </div>
+                <!-- /section:basics/sidebar.layout.minimize -->
+              <script type="text/javascript">
+                try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+              </script>
+            </div>
+@endif
               <div class="page-content">
                 <div class="page-content-area">
-                  @if(auth::user()->role_id == 5)
-                  <div class="col-xs-12 col-xs-offset-5">
-                    <a href="{{route('data_upload')}}">
-                        <button class="btn btn-primary btn-lg">Upload Data
-                            <i class="ace-icon fa fa-cloud-upload bigger-200"></i>
-                        </button>
-                      </a>
-
-                      <a href="{{route('viewData')}}">
-                        <button class="btn btn-primary btn-lg" disabled="disabled">Manage Data
-                       <i class="ace-icon fa fa-cog bigger-230"></i>
-                        </button>
-                      </a>
-                      </div>
-                      @endif
-                  <div class="page-header">
-                    <h1>
-                     Batch Details
-                  
-                    </h1>
-                     
-                  </div><!-- /.page-header -->
-
-
-                   @if (session('flash_message'))
+                @if (session('flash_message'))
                       <div class="alert alert-success">
                           {{ session('flash_message') }}
                       </div>
@@ -52,34 +61,17 @@
                     <div class="main-content">
             <div class="page-content">
               <div class="page-content-area">
-               
-
-                    <div class="row">
+             <div class="row">
                       <div class="col-xs-12">
                             <div class="row">
-                       <div>
-
-                         <table id="sample-table-3" class="table table-striped table-bordered table-hover">
+                       <div style="width:80%;margin-left:10%;margin-right:10%">
+                       
+                        <div class="table-header">
+                      List of Batch(es):                    </div>
+                    <table id="sample-table-3" class="table table-striped table-bordered table-hover">
 
                         <thead>
                           <tr>
-
-                             <!--  <th class="center">
-                                <label class="position-relative">
-                                   
-                                <input type="checkbox" class="ace" name="checkbox-top" /> 
-
-                                  <span class="lbl"></span> 
-                                 
-                                </label>
-                              </th> -->
-                             @if(auth::user()->role_id == 2)
-                             <th>Download</th>
-                             @endif
-
-                              @if(auth::user()->role_id == 4)
-                             <th>Download</th>
-                             @endif
                               @if(auth::user()->role_id != 5)
                              <th>Company Name</th>
                              @endif
@@ -87,189 +79,81 @@
                              <th>Btach Name</th>
                              <th>Count</th>
                              <th>Notes</th>
-                            
+                              
                              @if(auth::user()->role_id == 5 || auth::user()->role_id == 2 || auth::user()->role_id == 4)
                              <th>Proposed Due Date</th>
+                               @if(auth::user()->role_id == 2)
+                                 <th>Download</th>
+                                @endif
+                                @if(auth::user()->role_id == 4)
+                               <th>Download</th>
+                               @endif
                               <th>Status</th>
                              <th>Action</th>
-                             @endif
-
-                             
-
-                          <!--    <th>Status</th>
-                             <th></th> -->
-                             
-
-                             <!-- <th></th> -->
-                            </tr>
+                             @endif    </tr>
                         </thead>
         @foreach($orderBatch as $data)
+
                           @if(auth::user()->client_id == $data->client_id)
                       
                         <tbody>
 
-     @if(auth::user()->role_id == 2)
-                              @if($data->batchStatus->status == 'Pending')
-                              @else
-                            <tr>
-
-                              <td class="center">
-                                <label class="position-relative">
-                                  
-                                  <input type="checkbox" class="ace" value="" name="input[]" />
-                                  <span class="lbl"></span>
-                                  
-                                </label>
-                              </td>
-                              <td>{{$data->client->organization_name}}</td>
-                              <td>ddasd</td>
-                            <td>{{$data->batch_name}}</td>
-                            <td>{{$data->total_record_count}}</td>
-
-                            <td class="text-secondary">{{$data->batchStatus->status}}
-                            <br>
-                                 @if($data->batchStatus->status == 'Completed')
-                                  
-                                   <span><a href="{{url('download-csv', $data->id)}}">Download as Csv</a></span>
-                                @endif
-                                </td>
-                                  
-                                   @if($data->batchStatus->status == 'Submited')
-                                  <td>
-                                    <center>
-                                  <a data-toggle="modal" data-id="{{$data->id}}" data-target="#manager"><span class="glyphicon glyphicon-edit"></span>
-                                    </a>
-                                   </center>
-
-                                 </td>
-                                
-
-                                   @else
-                                   <td ><span class="text-success">Submited</span><br><br>
-                                     <a data-toggle="modal" data-id="{{$data->id}}" data-target="#manager" style="cursor: pointer;">
-                                  <!--  <span class="text-primary">Change ?</span>   <span class="glyphicon glyphicon-edit"></span> -->
-                                    </a></td>
-                                  @endif
-
-
-                        </tr>
-                           @endif
-                @else
+     @if(auth::user()->role_id == 5)
                 <!-- client area  -->
                            <tr>
-
-                             <!--  <td class="center">
-                                <label class="position-relative">
-                                  
-                                  <input type="checkbox" class="ace" value="" name="input[]" />
-                                  <span class="lbl"></span>
-                                  
-                                </label>
-                              </td> -->
-                                
-                             <!--  <td>{{$data->client->organization_name}}</td> -->
-                          
-                            <td><!-- <a data-toggle="modal" data-target="#batch_detail_view" data-id="{{$data->id}}" style="cursor: pointer;"> -->{{$data->batch_name}}</a></td>
+                            <td>{{$data->batch_name}}</td>
                             <td>{{$data->total_record_count}}</td>
-                            <td><a href="#" data-toggle="tooltip" title="{{$data->instructions}}">
-                              {{substr($data->instructions, 0, 10)}}
+                            <td><a style="text-decoration: none;color: #000;" href="#" title="{{$data->instructions}}">
+                              {{substr($data->instructions, 0, 100)}}
                                </a>
                             </td>
                             <td>{{$data->due_date}}</td>
-                            <td class="text-secondary">{{$data->batchStatus->status}}</td>
-                           
-                            @if($data->batchStatus->status == 'Pending')
-                            <td>
-                              <center>
-                                <a data-toggle="modal" data-target="#myModal" data-id="{{$data->id}}">
-                                   <button type="button" class="btn btn-primary btn-xs" style="margin: 10px;margin-bottom: 15px;">Submit</button>
-                                </a>
-
-                                 <a href="{{route('batchEdit', $data->id)}}" style="margin: 10px;">
-                                   <i class="fa fa-pencil-square-o bigger-230" aria-hidden="true"></i>
-                                </a>
-
-                                 <a href="{{route('batchFullView', $data->id)}}" style="margin: 10px;">
-                                   <i class="fa fa-eye bigger-230" aria-hidden="true" ></i>
-                                </a>
-
-                                <a data-toggle="modal" data-target="#delBatch" data-id="{{$data->id}}">
-                                <i class="fa fa-trash-o bigger-230" aria-hidden="true"></i>
-                              </a>
-                              </center>
-
-                             
-                            </td>
                             
-                            @endif
-                             @if($data->batchStatus->status == 'Submited')
-                            <td>
-                                <center>
-                             
 
-                                 <a href="{{route('batchEdit', $data->id)}}" style="margin: 10px;">
-                                   <i class="fa fa-pencil-square-o bigger-230" aria-hidden="true"></i>
+                             <td class="text-secondary">
+                              @if($data->status == 'Submited')
+                              <span class="label label-success arrowed-in arrowed-in-right">
+                                                            {{$data->status}}</span>
+                              @elseif ($data->status == 'Pending')                              
+                              <span class="label label-warning arrowed-in arrowed-in-right">
+                                                            {{$data->status}}</span>
+                                 @elseif ($data->status == 'In-Process') 
+                                 <span class="label label-info arrowed-in arrowed-in-right">
+                              {{$data->status}}</span>   
+                              @elseif ($data->status == 'QA-Review')                        
+                              <span class="label label-inverse arrowed-in arrowed-in-right">
+                              {{$data->status}}</span>
+                              @elseif ($data->status == 'Completed')
+                              <span class="label label-success arrowed-in arrowed-in-right">
+                              {{$data->status}}</span>
+                              @endif
+                             </td>
+                                <td>
+                        <center>
+  <div>
+     <a href="{{route('batchEdit', $data->batchs_id)}}" class="green" title="Edit Batch" style="display: {{ $data->status === 'Pending' ? 'inline-block':'none'}}">
+                                  <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                  </a>
+  <a href="{{route('batchFullView', $data->batchs_id)}}" class="blue" title="View Batch">
+                                   <i class="ace-icon fa fa-eye bigger-130" ></i>
                                 </a>
 
-                                 <a href="{{route('batchFullView', $data->id)}}" style="margin: 10px;">
-                                   <i class="fa fa-eye bigger-230" aria-hidden="true" ></i>
+  <a href="#" style="display: {{ $data->status === 'Pending' ? 'inline-block':'none'}}" data-toggle="modal" data-target="#myModal" data-id="{{$data->batchs_id}}" title="Start Processing">
+                                  <i class="ace-icon fa fa-play bigger-130"></i>
+                                   
                                 </a>
-
+                               
+                                  <a class="red" href="#" data-toggle="modal" data-target="#delBatch" data-id="{{$data->batchs_id}}" style="display: {{ $data->status === 'Pending' ? 'inline-block':'none'}}">
+                                  <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                </a>
+                         <a href="{{url('download-csv-client', $data->batchs_id)}}" class="green" style="display: {{ $data->status === 'Completed' ? 'inline-block':'none'}}">
+                                      <i class="ace-icon fa fa-file-excel-o bigger-130"></i></a>        
+                            </div>    
+                              
                               </center>
+
                             </td>
-                            @endif
-                              @if($data->batchStatus->status == 'In-Process')
-                            <td>
-                                <center>
-                             
-
-                                 <a href="{{route('batchEdit', $data->id)}}" style="margin: 10px;">
-                                   <i class="fa fa-pencil-square-o bigger-230" aria-hidden="true"></i>
-                                </a>
-
-                                 <a href="{{route('batchFullView', $data->id)}}" style="margin: 10px;">
-                                   <i class="fa fa-eye bigger-230" aria-hidden="true" ></i>
-                                </a>
-                                
-                              </center>
-                            </td>
-                            @endif
-                            @if($data->batchStatus->status == 'QA-Review')
-                            <td>
-                                <center>
-                             
-
-                                 <a href="{{route('batchEdit', $data->id)}}" style="margin: 10px;">
-                                   <i class="fa fa-pencil-square-o bigger-230" aria-hidden="true"></i>
-                                </a>
-
-                                 <a href="{{route('batchFullView', $data->id)}}" style="margin: 10px;">
-                                   <i class="fa fa-eye bigger-230" aria-hidden="true" ></i>
-                                </a>
-                                
-                              </center>
-                            </td>
-                            @endif
-
-                             @if($data->batchStatus->status == 'Completed')
-                            <td>
-                                <center>
-                                 <a href="{{route('batchEdit', $data->id)}}" style="margin: 10px;">
-                                   <i class="fa fa-pencil-square-o bigger-230" aria-hidden="true"></i>
-                                </a>
-
-                                 <a href="{{route('batchFullView', $data->id)}}" style="margin: 10px;">
-                                   <i class="fa fa-eye bigger-230" aria-hidden="true" ></i>
-                                </a>
-                                  
-                                    <a href="{{url('download-csv-client', $data->id)}}" style="margin: 10px;"><i class="fa fa-file-excel-o bigger-230"></i></a>
-                              </center>
-                         
-                            </td>
-                            @endif
-
-                           
-                        </tr>
+                         </tr>
                        
 
                         @endif
@@ -278,166 +162,159 @@
                           <?php 
                               $id = \auth::user()->id;
                               $manager = \App\CompanyManager::where('user_id', '=', $id)->get()->toArray();
-                               
+                               // print_r($manager);dd();
                                 $output=array();
                                 foreach ($manager as $value) {
                                   //print_r($value);
                                   for($i=0;$i<sizeof($value);$i++)
                                   {
-                                    //echo "<br>";
-                                    //print_r($value['client_id']);
                                     if(!in_array($value['client_id'], $output))
                                     {
                                    $output[] = $value['client_id']; 
-                                  // print_r($output);dd();
+
                                     }
                                   }
-
-                                 //$output[] = $manager['client_id'];
-                                 //print_r($output);
-                                 //echo "<br>";
                                 }
-                          //echo $data->client->id;
-                          
-                          //print_r($output);
-                                //dd();
                           ?>
-                            @if(is_null($manager))
-                            @else
-                          
-                       
-                             @if($data->batchStatus->status == 'Pending')
-                              @else
-                            <tr>
+                                @if(is_null($manager))
+                                @else
 
-                              <!-- <td class="center">
-                                <label class="position-relative">
-                                  
-                                  <input type="checkbox" class="ace" value="" name="input[]" />
-                                  <span class="lbl"></span>
-                                  
-                                </label>
-                              </td> -->
-                               <td><span><a href="{{url('download-csv', $data->id)}}"><center><i class="fa fa-file-excel-o"></i></center></a></span></td>
-                              <td>{{$data->client['company_name']}}</td>
+                              @if(in_array($data->clients_id, $output))
+                                 @if($data->status == 'Pending')
+                                  @else
+                                <tr>
+                                  <td>{{$data->organization_name}}</td>
 
-                            <td>{{$data->batch_name}}</td>
-                            <td>{{$data->total_record_count}}</td>
-                             <td><a href="#" data-toggle="tooltip" title="{{$data->instructions}}">
-                              {{substr($data->instructions, 0, 10)}}
-                               </a>
-                            </td>
-                            <td>{{$data->due_date}}</td>
-
-                            <td class="text-secondary">{{$data->batchStatus->status}}
-                            <br>
+                                <td>{{$data->batch_name}}</td>
+                                <td>{{$data->total_record_count}}</td>
+                                 <td><a style="text-decoration: none;color: #000;" href="#" title="{{$data->instructions}}">
+                                  {{substr($data->instructions, 0, 10)}}
+                                   </a>
                                 </td>
-                                  
-                                   @if($data->batchStatus->status == 'Submited')
-                                  <td >
-                                     <a data-toggle="tooltip" title="Start Processing" data-id="{{$data->id}}" data-target="#inProcess" style="cursor: pointer;" class="btn btn-xs btn-success" onclick="openModel()">
-                                  <span class="glyphicon glyphicon-circle-arrow-right"></span>  
-                                   
-                                    </a></td>
-                                
-                                 @endif
-                                   @if($data->batchStatus->status == 'In-Process')
-                                   <td >
-                                     <a data-toggle="modal" data-id="{{$data->id}}" data-target="#startQa" style="cursor: pointer;">
-                                      <button class="btn btn-primary btn-xs">
-                                          Start QA-Review 
-                                      </button>
-                                    <br><br>
-                                    </a></td>
-                                  @endif
+                                <td>{{$data->due_date}}</td>
 
-                                  @if($data->batchStatus->status == 'QA-Review')
-                                   <td >
-                                     <a class="btn btn-xs btn-success" style="cursor: pointer;" data-toggle="tooltip" title="Complete" href="{{route('completedBatch', $data->id)}}">
-                                      <span class="glyphicon glyphicon-ok"></span></a>
-                                    </td>
-                                  @endif
-                                   @if($data->batchStatus->status == 'Completed')
-                                   <td ></td>
-                                  @endif
+                                 <td>
+                                           <center>
+                                        <a href="{{url('download-csv', $data->id)}}" class="green" title="Download">
+                                           <i class="ace-icon glyphicon glyphicon-cloud-download bigger-130"></i></a> 
+                                          
+                                        </center>
+                                      
+                                      </td>
 
+                                      <td>
+          <a href="#" style="display: {{ $data->status === 'Submited' ? 'inline-block':'none'}}"  title="Submited"> 
+            <span class="label label-success arrowed-in arrowed-in-right">
+                                  {{$data->status}}</span>                           
+                                </a>
 
+           <a href="#" style="display: {{ $data->status === 'Pending' ? 'inline-block':'none'}}"  title="Pending"> 
+             <span class="label label-warning arrowed-in arrowed-in-right">
+                                  {{$data->status}}</span>                        
+                                 </a>
+                <a href="#" style="display: {{ $data->status === 'In-Process' ? 'inline-block':'none'}}"  title="Pending"> 
+                 <span class="label label-info arrowed-in arrowed-in-right">
+                                  {{$data->status}}</span>                   
+                                      </a>
+               <a href="#" style="display: {{ $data->status === 'QA-Review' ? 'inline-block':'none'}}"  title="Pending"> 
+                <span class="label label-inverse arrowed-in arrowed-in-right">
+                                  {{$data->status}}</span>            
+                                     </a>  
+                                     
+               <a href="#" style="display: {{ $data->status === 'Completed' ? 'inline-block':'none'}}"  title="Pending"> 
+                <span class="label label-success arrowed-in arrowed-in-right">
+                                  {{$data->status}}</span>       
+                                     </a>                                                     
+                                      </td> 
 
-                        </tr>
-                           @endif
+                                <td>
+                                  <center>
+               <a href="#" style="display: {{ $data->status === 'Submited' ? 'inline-block':'none'}}" data-toggle="modal" data-target="#inProcess" data-id="{{$data->batchs_id}}" title="Start Processing">
+                                               <i class="ace-icon fa fa-play bigger-130"></i>
+                                                
+                                             </a>
+                <a href="#" style="display: {{ $data->status === 'In-Process' ? 'inline-block':'none'}}" data-toggle="modal" data-target="#startQa" data-id="{{$data->batchs_id}}" title="Start QA-Review">
+                                                <i class="ace-icon glyphicon glyphicon-cog bigger-130"></i>
+                                                 
+                                              </a>                                                  
 
-                      
-                        @endif
+                 <a href="{{route('completedBatch', $data->batchs_id)}}" style="display: {{ $data->status === 'QA-Review' ? 'inline-block':'none'}}"  title="Complete the batch" class="green">
+                                                 <i class="ace-icon glyphicon glyphicon-saved bigger-130"></i>
+                                                  
+                                               </a>     
+                              </center>                                                               
+                                </td>
+                             </tr>
+                                   @endif
 
-                        @endif
-                        @if(auth::user()->role_id == 4)
-                                   @if($data->batchStatus->status == 'Pending')
+                              
+                                @endif
+                             
+                            @endif
+                          @elseif(auth::user()->role_id == 4)
+                          <!-- Admin -->
+                                 @if($data->status == 'Pending')
                                     @else
                                   <tr>
-
-                                   <!--  <td class="center">
-                                      <label class="position-relative">
-                                        
-                                        <input type="checkbox" class="ace" value="" name="input[]" />
-                                        <span class="lbl"></span>
-                                        
-                                      </label>
-                                    </td> -->
-                                   <td><span><a href="{{url('download-csv', $data->id)}}"><center><i class="fa fa-file-excel-o"></i></center></a></span></td> 
-                                    <td>{{$data->client['company_name']}}</td>
+                                    
+                                  
+                                    <td>{{$data->organization_name}}</td>
                                   <td>{{$data->batch_name}}</td>
                                   <td>{{$data->total_record_count}}</td>
-                                  <td><a href="#" data-toggle="tooltip" title="{{$data->instructions}}">
+                                  <td><a style="text-decoration: none;color: #000;" href="#" title="{{$data->instructions}}">
                               {{substr($data->instructions, 0, 10)}}
                                </a>
                             </td>
                             <td>{{$data->due_date}}</td>
+                            <td>
+                                           <center>
+                                        <a href="{{url('download-csv', $data->id)}}" class="green">
+                                           <i class="ace-icon glyphicon glyphicon-cloud-download bigger-130"></i></a> 
+                                          
+                                        </center>
+                                      
+                                      </td> 
+                                                                  <td>
+                                      <a href="#" style="display: {{ $data->status === 'Submited' ? 'inline-block':'none'}}"  title="Submited"> 
+                                        <span class="label label-success arrowed-in arrowed-in-right">
+                                                              {{$data->status}}</span>                           
+                                                            </a>
 
-                                  <td class="text-secondary">{{$data->batchStatus->status}}
-                                  <br>
-                                      @if($data->batchStatus->status == 'Submited')
-                                  <td >
-                                     <a data-toggle="modal" data-id="{{$data->id}}" data-target="#inProcess" style="cursor: pointer;">
-                                      <button class="btn btn-primary btn-xs">
-                                          Start Processing
-                                      </button>
-                                    <br><br>
-                                    </a></td>
-                                
-                                 @endif
-                                   @if($data->batchStatus->status == 'In-Process')
-                                   <td >
-                                     <a data-toggle="modal" data-id="{{$data->id}}" data-target="#startQa" style="cursor: pointer;">
-                                      <button class="btn btn-primary btn-xs">
-                                          Start QA-Review 
-                                      </button>
-                                    <br><br>
-                                    </a></td>
-                                  @endif
+                                       <a href="#" style="display: {{ $data->status === 'Pending' ? 'inline-block':'none'}}"  title="Pending"> 
+                                         <span class="label label-warning arrowed-in arrowed-in-right">
+                                                              {{$data->status}}</span>                        
+                                                             </a>
+                                            <a href="#" style="display: {{ $data->status === 'In-Process' ? 'inline-block':'none'}}"  title="Pending"> 
+                                             <span class="label label-info arrowed-in arrowed-in-right">
+                                                              {{$data->status}}</span>                   
+                                                                  </a>
+                                           <a href="#" style="display: {{ $data->status === 'QA-Review' ? 'inline-block':'none'}}"  title="Pending"> 
+                                            <span class="label label-inverse arrowed-in arrowed-in-right">
+                                                              {{$data->status}}</span>            
+                                                                 </a>  
+                                                                 
+                                           <a href="#" style="display: {{ $data->status === 'Completed' ? 'inline-block':'none'}}"  title="Pending"> 
+                                            <span class="label label-success arrowed-in arrowed-in-right">
+                                                              {{$data->status}}</span>       
+                                                                 </a>                                                     
+                                                                  </td> 
 
-                                  @if($data->batchStatus->status == 'QA-Review')
-                                   <td >
-                                      <a style="cursor: pointer;" href="{{route('completedBatch', $data->id)}}">
-                                      <button class="btn btn-primary btn-xs" >
-                                          Batch Completed 
-                                      </button>
-                                    <br><br>
-                                    </a></td>
-                                  @endif
-                                   @if($data->batchStatus->status == 'Completed')
-                                   <td ></td>
-                                  @endif
-                                  
-                                   
-                                 
+                                   <td>
+              <a href="#" style="display: {{ $data->status === 'Submited' ? 'inline-block':'none'}}" data-toggle="modal" data-target="#inProcess" data-id="{{$data->batchs_id}}" title="Start Processing">
+                                              <i class="ace-icon fa fa-play bigger-130"></i>
+                                               
+                                            </a>  
 
-                                  <!--  @if($data->batchStatus->status == 'Completed')
-                                   <td class="text-success">
-                                    Completed
-                                   </td>
-                                  @endif -->
-
-
+              <a href="#" style="display: {{ $data->status === 'In-Process' ? 'inline-block':'none'}}" data-toggle="modal" data-target="#startQa" data-id="{{$data->batchs_id}}" title="Start QA-Review">
+                                              <i class="ace-icon glyphicon glyphicon-cog bigger-130"></i>
+                                               
+                                            </a>    
+                                            
+               <a href="{{route('completedBatch', $data->batchs_id)}}" style="display: {{ $data->status === 'QA-Review' ? 'inline-block':'none'}}"  title="Complete the batch" class="green">
+                                               <i class="ace-icon glyphicon glyphicon-saved bigger-130"></i>
+                                                
+                                             </a>                                                                 
+                                   </td>                               
                               </tr>
                               @endif
                         @endif
@@ -624,18 +501,64 @@
             <!-- ends here -->
 
 @include('layouts.footer')
+<style type="text/css">
+  .tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
 
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+
+    /* Position the tooltip text */
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+
+    /* Fade in tooltip */
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Tooltip arrow */
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+</style>
  <script src="{{ asset('/') }}public/aceadmin/assets/js/jquery.dataTables.min.js"></script>
     <script src="{{ asset('/') }}public/aceadmin/assets/js/jquery.dataTables.bootstrap.js"></script>
 <script>
- 
-$(document).ready(function(){
-
-    $('[data-toggle="tooltip"]').tooltip();   
+  $( document ).ready(function() {
+ $('[data-tooltip="tooltip"]').tooltip();
 });
 </script> 
 <script type="text/javascript">
+
  $('#myModal').on('show.bs.modal', function (e) {
+  //alert();
   var id = $(e.relatedTarget).data('id');
       $('.client_class').val(id);   /*
         proceed with rest of modal using the rowid variable as necessary 
@@ -650,6 +573,7 @@ $(document).ready(function(){
      });
 
  $('#inProcess').on('show.bs.modal', function (e) {
+//  alert($(e.relatedTarget).data('id'));
   var id = $(e.relatedTarget).data('id');
       $('.inProcess_staus').val(id);   /*
         proceed with rest of modal using the rowid variable as necessary 

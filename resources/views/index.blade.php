@@ -1,20 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
   @include('layouts.header')
-  @include('layouts.sidebar')
   
   <body class="no-skin">
           <div class="main-container" id="main-container">
             <script type="text/javascript">
               try{ace.settings.check('main-container' , 'fixed')}catch(e){}
             </script>
+                 <div id="sidebar" class="sidebar      h-sidebar                navbar-collapse collapse">
+                 <script type="text/javascript">
+                   try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+                 </script>
+
+                         <ul class="nav nav-list">
+                            
+                            <li class="active hover">
+                              <a href="{{route('dashboard')}}">
+                                 <i class="menu-icon fa fa-tachometer bigger-170"></i>
+                                <span class="menu-text">Dashboard</span>
+
+                                <b class="arrow fa fa-angle-down"></b>
+                              </a>
+                            </li>
+
+                           <li class="open hover">
+                             <a href="{{route('client.index')}}">
+                                <i class="menu-icon fa fa-plus-square-o bigger-170"></i>
+                               <span class="menu-text"> Create Client</span>
+
+                               <b class="arrow fa fa-angle-down"></b>
+                             </a>
+                           </li>
+
+                            <li class="open hover">
+                             <a href="{{route('client.view')}}">
+                                <i class="menu-icon fa fa-cogs bigger-170"></i>
+                               <span class="menu-text"> Manage Clients </span>
+                             </a>
+
+                             <b class="arrow"></b>
+                           </li>
+                           
+                            <li class="open hover">
+                             <a href="{{route('user')}}">
+                                <i class="menu-icon fa fa-plus-square-o bigger-170"></i>
+                               <span class="menu-text"> Creates Users</span>
+
+                               <b class="arrow fa fa-angle-down"></b>
+                             </a>
+                           </li>
+
+                            <li class="open hover">
+                             <a href="{{route('userView')}}">
+                                 <i class="menu-icon fa fa-cogs bigger-170"></i>
+                               <span class="menu-text"> Manage Users</span>
+
+                               <b class="arrow fa fa-angle-down"></b>
+                             </a>
+                           </li>
+                                             
+            </ul><!-- /.nav-list -->
+
+                 <!-- #section:basics/sidebar.layout.minimize -->
+                 <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+                   <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+                 </div>
+                   <!-- /section:basics/sidebar.layout.minimize -->
+                 <script type="text/javascript">
+                   try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+                 </script>
+               </div>
               <div class="page-content">
                 <div class="page-content-area">
-                  <div class="page-header">
-                    <h1>
-                     Batch Details
-                    </h1>
-                  </div><!-- /.page-header -->
                    @if (session('flash_message'))
                       <div class="alert alert-success">
                           {{ session('flash_message') }}
@@ -27,21 +84,18 @@
                       <div class="col-xs-12">
                             <div class="row">
                        <div>
+                        <div style="width:80%;margin-left:10%;margin-right:10%">
+                        
+                            <div class="table-header">
+                          List of Client(s):                    </div>
                          <table id="sample-table-3" class="table table-striped table-bordered table-hover">
                         <thead>
                           <tr>
-                            <!--   <th class="center">
-                                <label class="position-relative"> 
-                                  <input type="checkbox" class="ace" name="checkbox-top" />
-                                  <span class="lbl"></span> 
-                                </label>
-                              </th> -->
+                            <th>Company Name</th>
                              <th>Btach Name</th>
                              <th>Count</th>
                              <th>Proposed Due Date</th>
                              <th>Status</th>
-
-                             <!-- <th></th> -->
                             </tr>
                         </thead>
               @foreach($orderBatch as $data)
@@ -49,24 +103,44 @@
                         <tbody>
 
                             <tr>
-
-                             <!--  <td class="center">
-                                <label class="position-relative">
-                                  
-                                  <input type="checkbox" class="ace" value="" name="input[]" />
-                                  <span class="lbl"></span>
-                                  
-                                </label>
-                              </td> -->
+                            <td>{{$data->client->organization_name}}</td>
                             <td>{{$data->batch_name}}</td>
                             <td>{{$data->total_record_count}}</td>
                             <td>{{$data->due_date}}</td>
-                            <td class="text-secondary">{{$data->batchStatus->status}}
+                            <td >
+                              <a href="#" style="display: {{ $data->batchStatus->status === 'Submited' ? 'inline-block':'none'}}"  title="Submited"> 
+                                <span class="label label-success arrowed-in arrowed-in-right">
+                                                      {{$data->batchStatus->status}}</span>                           
+                                                    </a>
+
+                               <a href="#" style="display: {{ $data->batchStatus->status === 'Pending' ? 'inline-block':'none'}}"  title="Pending"> 
+                                 <span class="label label-warning arrowed-in arrowed-in-right">
+                                                      {{$data->batchStatus->status}}</span>                        
+                                                     </a>
+                                    <a href="#" style="display: {{ $data->batchStatus->status === 'In-Process' ? 'inline-block':'none'}}"  title="In-Process"> 
+                                     <span class="label label-info arrowed-in arrowed-in-right">
+                                                      {{$data->batchStatus->status}}</span>                   
+                                                          </a>
+                                   <a href="#" style="display: {{ $data->batchStatus->status === 'QA-Review' ? 'inline-block':'none'}}"  title="QA-Review"> 
+                                    <span class="label label-inverse arrowed-in arrowed-in-right">
+                                                      {{$data->batchStatus->status}}</span>            
+                                                         </a>  
+                                                         
+                                   <a href="#" style="display: {{ $data->batchStatus->status === 'Completed' ? 'inline-block':'none'}}"  title="Completed"> 
+
+                                    <span class="label label-success arrowed-in arrowed-in-right">
+                                                      {{$data->batchStatus->status}}</span> 
+
+                                                  @if($data->batchStatus->status == 'Completed')
+                                                   
+                                                    <p><a href="{{url('download-csv', $data->id)}}">Download as Csv</a></p>
+                                                 @endif      
+                                                         </a>                                                     
+
+
+                            <!-- {{$data->batchStatus->status}}
                             <br>
-                                 @if($data->batchStatus->status == 'Completed')
-                                  
-                                   <span><a href="{{url('download-csv', $data->id)}}">Download as Csv</a></span>
-                                @endif
+                                -->
                                 </td>
 
 
@@ -77,7 +151,7 @@
 
                       </table>
 
-
+</div>
                        
                   </div>
                   </div><!-- /.span -->

@@ -2,11 +2,6 @@
 <html lang="en">
   @include('layouts.header')
 
-  @if(auth::user()->role_id != 5 || auth::user()->role_id != 2)
-  @else
-  @include('layouts.sidebar')
-  @endif
-
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
   <body class="no-skin">
@@ -14,27 +9,56 @@
             <script type="text/javascript">
               try{ace.settings.check('main-container' , 'fixed')}catch(e){}
             </script>
-              <div class="page-content">
-                <div class="page-content-area">
-                  <div class="page-header">
-                    <h1>
-                    BATCH EDIT  
-                    </h1>
-                    <a href="{{ url()->previous() }}" class="col-lg-8 col-lg-offset-2" style="margin-top: -30px">
-                     <i class="fa fa-arrow-left btn-lg" aria-hidden="true"></i>
-                    </a>
-                  </div><!-- /.page-header -->
-                  <div class="row">
-                    <div class="col-lg-12">
-                        
-                      
-                     @if (session('error_message'))
+                   <div id="sidebar" class="sidebar      h-sidebar                navbar-collapse collapse">
+                 <script type="text/javascript">
+                   try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+                 </script>
+
+                         <ul class="nav nav-list">
+                           <li class="active hover">
+                             <a href="{{route('viewData')}}">
+                               <i class="menu-icon fa fa-tachometer"></i>
+                               <span class="menu-text"> Dashboard </span>
+                             </a>
+
+                             <b class="arrow"></b>
+                           </li>
+
+                           <li class="open hover">
+                             <a href="{{route('data_upload')}}">
+                                <i class="menu-icon fa fa-cog"></i>
+                               <span class="menu-text"> Upload Data </span>
+
+                               <b class="arrow fa fa-angle-down"></b>
+                             </a>
+                           </li>
+                                             
+            </ul><!-- /.nav-list -->
+
+                 <!-- #section:basics/sidebar.layout.minimize -->
+                 <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+                   <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+                 </div>
+                   <!-- /section:basics/sidebar.layout.minimize -->
+                 <script type="text/javascript">
+                   try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+                 </script>
+               </div>
+                @if (session('error_message'))
                                     <div class="alert alert-success">
                                         {{ session('error_message') }}
                                     </div>
-                    @endif       
-        
-                  <div class="col-lg-12">
+                    @endif     
+              <div class="page-content">
+                <div class="page-content-area">
+                  <div class="row">
+                    <div class="col-xs-12">
+
+                <div class='col-lg-8 col-lg-offset-2'>
+                      <div class=" panel panel-primary" style="width:80%;margin-left:10%;margin-right:10%">
+                       
+            <div class="panel-heading "><h4>Edit {{$batchEdit->batch_name}}</h4></div>
+            <div class="panel-body">
                     <form action="{{ route('updateBatch', $batchEdit->id)}}" method="POST"> 
                       {{csrf_field()}}
                    <div class="col-lg-6 col-lg-offset-3">
@@ -93,6 +117,9 @@
                           <input type="submit" class="pull-right  btn btn-primary" value="Save">
                         </div>
                         </form>
+                      </div>
+                    </div>
+                    </div>
                     </div>
  
                        <!--  </form> -->
@@ -102,8 +129,7 @@
                     </div><!-- /.col -->
                   </div><!-- /.row -->
                 </div><!-- /.page-content-area -->
-              </div><!-- /.page-content -->
-            </div><!-- /.main-content -->
+           
 
 @include('layouts.footer')
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>

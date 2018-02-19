@@ -1,31 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
   @include('layouts.header')
-  @include('layouts.sidebar')
 
   <body class="no-skin">
           <div class="main-container" id="main-container">
             <script type="text/javascript">
               try{ace.settings.check('main-container' , 'fixed')}catch(e){}
             </script>
+                 <div id="sidebar" class="sidebar      h-sidebar                navbar-collapse collapse">
+                 <script type="text/javascript">
+                   try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+                 </script>
+
+                        <ul class="nav nav-list">
+                          
+                          <li class="open hover">
+                            <a href="{{route('dashboard')}}">
+                               <i class="menu-icon fa fa-tachometer bigger-170"></i>
+                              <span class="menu-text">Dashboard</span>
+
+                              <b class="arrow fa fa-angle-down"></b>
+                            </a>
+                          </li>
+
+                           <li class="active hover">
+                             <a href="{{route('client.index')}}">
+                                 <i class="menu-icon fa fa-plus-square-o bigger-170"></i>
+                               <span class="menu-text"> Create Client</span>
+                             </a>
+                           </li>
+
+                            <li class="open hover">
+                             <a href="{{route('client.view')}}">
+                                <i class="menu-icon fa fa-cogs bigger-170"></i>
+                               <span class="menu-text"> Manage Clients </span>
+                             </a>
+
+                             <b class="arrow"></b>
+                           </li>
+                           
+                            <li class="open hover">
+                             <a href="{{route('user')}}">
+                               <i class="menu-icon fa fa-plus-square-o bigger-170"></i>
+                               <span class="menu-text"> Creates Users</span>
+                            </a>
+                           </li>
+
+                            <li class="open hover">
+                             <a href="{{route('userView')}}">
+                                <i class="menu-icon fa fa-cog"></i>
+                               <span class="menu-text"> Manage Users</span>
+                            </a>
+                           </li>
+                                             
+            </ul><!-- /.nav-list -->
+
+                 <!-- #section:basics/sidebar.layout.minimize -->
+                 <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+                   <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+                 </div>
+                  <script type="text/javascript">
+                   try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+                 </script>
+               </div>
               <div class="page-content">
                 <div class="page-content-area">
-                  <div class="page-header">
-                    <h1>
-                    ADD NEW CLIENT HERE
-                  
-                    </h1>
-                  </div><!-- /.page-header -->
                   <div class="row">
-                    <div class="col-lg-12">
-                        
-                      
+                    <div class="col-lg-12">                      
                      @if (session('error_message'))
                                     <div class="alert alert-success">
                                         {{ session('error_message') }}
                                     </div>
                     @endif       
-                    
+          <div class="panel panel-primary" style="width:80%;margin-left:10%;margin-right:10%">
+                       
+            <div class="panel-heading "><h4>Add New Client</h4></div>
+            <div class="panel-body">
              <form action="{{route('client.store')}}" method="POST" >
                       {{ csrf_field() }}
 
@@ -42,7 +92,7 @@
                                           <strong>{{ $errors->first('organization_name') }}</strong>
                                       </span>
                                   @endif
-                                
+                                  <span id="result2"></span>
                                     <i class="ace-icon fa fa-building"></i>
                                   </span>
                                 </label>
@@ -94,6 +144,7 @@
                                         <strong>{{ $errors->first('email') }}</strong>
                                     </span>
                                 @endif
+                                <span id='result'></span>
                             <i class="ace-icon fa fa-envelope"></i>
                             </span>
                           </label>
@@ -262,6 +313,9 @@
     </div>
                         </form>
 
+                       </div>
+                                  </div>          
+
             </div>
 
                     </div><!-- /.col -->
@@ -418,6 +472,59 @@ $(function(){
       }
   });
 });  
+
+$( "#email" ).change(function() {
+    var emailstring = $("#email").val();
+
+     $("#result").text("");
+  var email = $("#email").val();
+  if (validateEmail(email)) {
+                $.ajax({
+                   url: "{{route('email_check')}}",
+                   type: 'get',
+                   //data: 'organization_name=' + username,
+                   success: function(result){
+                    // alert();
+                    if ($.inArray($("#email").val(), result) >= 0) {
+                        $("#result").text(email + " is already used please try another");
+                       $("#result").css("color", "red");
+                    }else{
+                                   $("#result").text(email + "is valid");
+                                   $("#result").css("color", "green");
+                              }
+                            }
+                   });
+
+  } else {
+    $("#result").text(email + " is not valid");
+    $("#result").css("color", "red");
+  }
+  return false;
+});
+
+function validateEmail(email) {
+  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+}
+
+var username = $('#organization_name').val();
+$('#organization_name').change(function() {
+   $.ajax({
+      url: "{{route('organization_name_check')}}",
+      type: 'get',
+      //data: 'organization_name=' + username,
+      success: function(result){
+       // alert();
+       if ($.inArray($('#organization_name').val(), result) >= 0) {
+           $("#result2").text($('#organization_name').val() + " is already used please try another");
+          $("#result2").css("color", "red");
+       }else{
+                      $("#result2").text($('#organization_name').val() + " is valid");
+                      $("#result2").css("color", "green");
+                 }
+               }
+      });
+});
 </script>
   </body>
 </html>

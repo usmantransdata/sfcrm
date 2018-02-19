@@ -1,9 +1,6 @@
 <!DOCTYPE html>
   @include('layouts.header')
-  @if(auth::user()->role_id != 5 || auth::user()->role_id != 2)
-  @else
-  @include('layouts.sidebar')
-  @endif
+
 
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
@@ -13,23 +10,49 @@
             <script type="text/javascript">
               try{ace.settings.check('main-container' , 'fixed')}catch(e){}
             </script>
+                            @if(auth::user()->role_id == 5)
+                              
+                              <div id="sidebar" class="sidebar      h-sidebar                navbar-collapse collapse">
+                            <script type="text/javascript">
+                              try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+                            </script>
+
+                                    <ul class="nav nav-list">
+                                      <li class="hover">
+                                        <a href="{{route('viewData')}}">
+                                          <i class="menu-icon fa fa-tachometer"></i>
+                                          <span class="menu-text"> Dashboard </span>
+                                        </a>
+
+                                        <b class="arrow"></b>
+                                      </li>
+
+                                      <li class="active open hover">
+                                        <a href="{{route('data_upload')}}">
+                                           <i class="menu-icon fa fa-cog"></i>
+                                          <span class="menu-text"> Upload Data </span>
+
+                                          <b class="arrow fa fa-angle-down"></b>
+                                        </a>
+                                      </li>
+                                    </ul>
+                                  </li>
+                                </ul>
+                              </li>
+                              </li>
+                       </ul><!-- /.nav-list -->
+
+                            <!-- #section:basics/sidebar.layout.minimize -->
+                            <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+                              <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+                            </div>
+                              <!-- /section:basics/sidebar.layout.minimize -->
+                            <script type="text/javascript">
+                              try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+                            </script>
+                          </div>
+              @endif
               <div class="page-content">
-
-              	 @if(auth::user()->role_id == 5)
-                   <div class="col-xs-12 col-xs-offset-5">
-                    <a href="{{route('data_upload')}}">
-                        <button disabled="disabled" class="btn btn-primary btn-lg">Upload Data
-                            <i class="ace-icon fa fa-cloud-upload bigger-200"></i>
-                        </button>
-                      </a>
-
-                      <a href="{{route('viewData')}}">
-                        <button class="btn btn-primary btn-lg" >Manage Data
-                       <i class="ace-icon fa fa-cog bigger-200"></i>
-                        </button>
-                      </a>
-                      </div>
-                      @endif
                   <div class="page-header">
                     <h1>
 								Upload Data

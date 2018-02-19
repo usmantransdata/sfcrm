@@ -26,11 +26,15 @@ class BatchDetailController extends Controller
            // print_r(Auth::user()->role_id);dd();
             if(Auth::user()->role_id==2 || Auth::user()->role_id==5 || Auth::user()->role_id==4){
 
-        $orderBatch = BatchDetail::with('client')->with('batchStatus')->get();
+        $orderBatch = DB::table('batch_details')->select('batch_details.*', 'batch_details.id as batchs_id', 'client.*', 'client.id as clients_id', 'batch_status.*')->join('client', 'batch_details.client_id', 'client.id')->join('batch_status', 'batch_details.status_id', '=', 'batch_status.id')->get();
+
+        //BatchDetail::with('companyId')->get();
+       /* echo "<pre>";
+        print_r($orderBatch[0]);dd();*/
         return view('data.view', compact('orderBatch'));
                      }else{
 
-                        return redirect()->back();
+                        return \Route::respondWithRoute('fallback');
                      }
 
      }
@@ -76,8 +80,10 @@ class BatchDetailController extends Controller
            $batchLog->batch_status_id = $status->id;
            $batchLog->status_change_date = \Carbon\Carbon::now()->format('Y-m-d');
            $batchLog->updated_by = Auth::user()->id;
-           $batchLog->save();
-            BatchDetail::where('id', '=', $request['client_id'])->update(['status_id'=>$request['inProcess_staus']]);
+             $batchLog->batch_id = $request['client_id'];
+            $batchLog->save();
+           
+          BatchDetail::where('id', '=', $request['client_id'])->update(['status_id'=>$request['inProcess_staus']]);
            
         }    
         if(isset($request['startQa_status'])){
@@ -89,8 +95,10 @@ class BatchDetailController extends Controller
            $batchLog->batch_status_id = $status->id;
            $batchLog->status_change_date = \Carbon\Carbon::now()->format('Y-m-d');
            $batchLog->updated_by = Auth::user()->id;
-           $batchLog->save();
-            BatchDetail::where('id', '=', $request['client_id'])->update(['status_id'=>$request['startQa_status']]);
+            $batchLog->batch_id = $request['client_id'];
+            $batchLog->save();
+         BatchDetail::where('id', '=', $request['client_id'])->update(['status_id'=>$request['startQa_status']]);
+           
             // return redirect()->route('viewData');
         }    
 
@@ -103,10 +111,11 @@ class BatchDetailController extends Controller
            $batchLog->batch_status_id = $status->id;
            $batchLog->status_change_date = \Carbon\Carbon::now()->format('Y-m-d');
            $batchLog->updated_by = Auth::user()->id;
-           $batchLog->save();
+            $batchLog->batch_id = $request['client_id'];
+            $batchLog->save();
+           BatchDetail::where('id', '=', $request['client_id'])->update(['status_id'=>$request['pendindStatus']]);
+             }      
 
-            BatchDetail::where('id', '=', $request['client_id'])->update(['status_id'=>$request['pendindStatus']]);
-             }        
       return redirect()->route('viewData');
     }
 
