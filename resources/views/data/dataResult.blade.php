@@ -40,34 +40,36 @@
                        <div>
                       
 
-                         <table id="sample-table-3" class="table table-striped table-bordered table-hover">
+                         <table id="sample-table-3" class="table table-striped table-bordered table-hover" style="overflow-y: scroll;height: 100%;display: block;
+    width: 100%;overflow-x: scroll;">
 
                         <thead>
                           <tr>
 
-                              <th class="center">
-                                <label class="position-relative">
-                                   
-                                  <input type="checkbox" class="ace" name="checkbox-top" />
-
-                                  <span class="lbl"></span> 
-                                 
-                                </label>
-                              </th><!-- 
-                             <th>Id</th>
-                             <th>Batch id</th> -->
-                             <th>First Name</th>
+                             
+                              <th>First Name</th>
                              <th>Last Name</th>
+                             <th>Company Name</th>
                              <th>Title</th>
-                              <th>Phone Number</th>
-                              <th >Validation</th>
-                              <th>Disposition</th>
-                              <th>Organization</th>
+                             <th>Email1</th>
+                             <th>Email2</th>
+                             <th>Email3</th>
+                              <th>Phone Number1</th>
+                              <th>Phone Number2</th>
+                              <th>Phone Number3</th>
                               <th>Adress1</th>
                               <th>Adress2</th>
+                              <th>Adress3</th>
+                              <th>City</th>
+                              <th>State</th>
+                              <th>Zip</th>
+                              <th>Country</th>
+                              <th>Disposition</th>
+                              <th>Validation</th>
                               <th>Health</th>
+                            
+
                               </tr>
-      
                         </thead>
 
                         <tbody>
@@ -76,25 +78,26 @@
                          @foreach($GLOBALS['variable'] as $data)
                       <form id="goodData">   
                             <tr>
-                              <td class="center">
-                                <label class="position-relative">
-                                  
-                                  <input type="checkbox" class="ace" value="" name="input[]" />
-                                  <span class="lbl"></span>
-                                  
-                                </label>
-                              </td>
 
-                            <td>{{ $data['first_name']  }}</td>
-                           
+                             <td>{{ $data['first_name']  }}</td>
                             <td>{{$data['last_name']}}</td>
-                             <td>{{ $data['title'] }}</td>
-                             <td>{{ $data['phone_number'] }}</td>
-                             <td id="validation">{{ $data['validation'] }}</td>
-                             <td>{{ $data['disposition'] }}</td>
-                             <td>{{ $data['organization'] }}</td>
-                             <td>{{ $data['address1'] }}</td>
-                             <td>{{ $data['address2'] }}</td>
+                            <td>{{$data['company_name']}}</td>
+                            <td>{{$data['title']}}</td>
+                            <td>{{$data['email1']}}</td>
+                            <td>{{$data['email2']}}</td>
+                            <td>{{$data['email3']}}</td>
+                            <td>{{$data['phone_number1']}}</td>
+                            <td>{{$data['phone_number2']}}</td>
+                            <td>{{$data['phone_number3']}}</td>
+                            <td>{{$data['address1']}}</td>
+                            <td>{{$data['address2']}}</td>
+                            <td>{{$data['address3']}}</td>
+                            <td>{{$data['city']}}</td>
+                            <td>{{$data['state']}}</td>
+                            <td>{{$data['zip']}}</td>
+                            <td>{{$data['country']}}</td>
+                            <td>{{$data['disposition']}}</td>
+                            <td>{{$data['validation']}}</td>
                              @if($data['health_status'] == 'Bad Record')
                              <td class="text-danger">{{ $data['health_status'] }}</td>
                              @elseif ($data['health_status'] == 'Record Not Found')
@@ -127,8 +130,6 @@
        </div><!-- /.page-content-area -->
               </div><!-- /.page-content -->
             </div><!-- /.main-content -->
-
-          
 
 @include('layouts.footer')
 

@@ -28,7 +28,7 @@ Route::post('userActivate', 'AdminController@userActivate')->name('userActivate'
 
 
 Route::post('import_parse', 'ClientController@parseImport')->name('import_parse');
-Route::post('import_process', 'ClientController@processImport')->name('import_process');
+Route::post('import_process', 'ClientController@importcsv')->name('import_process');
 Route::post('getconttentbatch', 'ClientController@get_contentbatch_columns')->name('getconttentbatch');
 
 
@@ -85,7 +85,7 @@ Route::get('download-csv/{id}', function ($id) {
 
 //echo "string";dd();
 	$batch = \App\CotentBatch::where('batch_id', '=', $id)->get();
-	//print_r($batch);dD();
+	//print_r($id);dd();
 	$csvExporter = new \Laracsv\Export();
 
 	return $csvExporter->build($batch, ['id', 'batch_id', 'first_name', 'last_name', 'company_name', 'title', 'email1', 'email2', 'email3', 'phone_number1', 'phone_number2', 'phone_number3', 'address1', 'address2', 'address3', 'city', 'state', 'zip', 'country', 'disposition', 'validation', 'health_status'])->download();
@@ -109,11 +109,11 @@ Route::get('email_check', function(){
 Route::get('download-csv-client/{id}', function ($id) {
 
 //echo "string";dd();
-	$batch = \App\OrderBatch::where('batch_id', '=', $id)->get();
+	$batch = \App\CotentBatch::where('batch_id', '=', $id)->get();
 	//print_r($batch);dD();
 	$csvExporter = new \Laracsv\Export();
 
-	return $csvExporter->build($batch, ['first_name', 'last_name', 'title', 'phone_number', 'validation', 'disposition', 'organization', 'address1', 'address2'])->download();
+	return $csvExporter->build($batch, ['first_name', 'last_name', 'company_name', 'title', 'email1', 'email2', 'email3', 'phone_number1', 'phone_number2', 'phone_number3', 'address1', 'address2', 'address3', 'city', 'state', 'zip', 'country', 'disposition', 'validation'])->download();
 
 });
 

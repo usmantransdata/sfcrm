@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 use App\Client;
 use App\User;
-use App\OrderBatch;
 use App\BatchDetail;
 use App\CotentBatch;
 use App\CompanyManager;
@@ -54,7 +53,10 @@ class ClientController extends Controller
     public function processImport(Request $request)
     {
       $input = $request->all(); 
-      
+      //echo "ass";
+     //echo 
+      print_r($request->file('filename'));
+       dd($input);
        $path = "storage/app/".$input['filename'];
        $data = Excel::load($path, function($reader) {})->get()->toArray();
        $id = Auth::user()->id; 
@@ -112,7 +114,9 @@ class ClientController extends Controller
                   
                 }
                 BatchDetail::where('id', $batch_detail->id)->update(array('total_record_count' => $count));
-                return redirect()->route('viewData')->with('message', 'You successfully added new batch order!!');
+                
+                return "You successfully added new batch order!";
+               // return redirect()->route('viewData')->with('message', 'You successfully added new batch order!!');
 
       
       
@@ -297,7 +301,7 @@ class ClientController extends Controller
            Excel::load($request->file('uploaded_file')->getRealPath(), function ($reader) {
                $count = 0; 
               // print_r($input);dd();
-               $existingdata = OrderBatch::where('batch_id', '=', Input::get('file_id'))->get()->toArray();
+               $existingdata = CotentBatch::where('batch_id', '=', Input::get('file_id'))->get()->toArray();
                $importdata=$reader->toArray();
                $oldids=array();
                $importids=array();
@@ -327,13 +331,18 @@ class ClientController extends Controller
                                  {
                                  $existingdata[$j]['health_status']="Bad Record";
                                 }
+
+                                elseif($existingdata[$j]['company_name']!=$importdata[$key]['company_name'])
+                                 {
+                                 $existingdata[$j]['health_status']="Bad Record";
+                                }
                                  
                                 elseif($existingdata[$j]['title']!=$importdata[$key]['title'])
                                  {
                                  $existingdata[$j]['health_status']="Bad Record";
                                  
                                 }
-                                elseif($existingdata[$j]['phone_number']!=$importdata[$key]['phone_number'])
+                                elseif($existingdata[$j]['phone_number1']!=$importdata[$key]['phone_number1'])
                                  {
                                  $existingdata[$j]['health_status']="Bad Record";
                                  
@@ -357,11 +366,6 @@ class ClientController extends Controller
                                   
                                      if(is_null($existingdata[$j]['validation'])){
                                    $existingdata[$j]['validation']=$importdata[$key]['validation'];
-                                  }
-
-
-                                    if(is_null($existingdata[$j]['organization'])){
-                                    $existingdata[$j]['organization']=$importdata[$key]['organization'];
                                   }
 
                                 }
@@ -402,7 +406,8 @@ class ClientController extends Controller
       
         foreach ($completed_data_table as  $value) {
        // echo $value->validation;dd();
-        $update = \App\OrderBatch::where('id', '=', $value->id)->update(['validation'=> $value->validation, 'disposition'=> $value->disposition, 'health_status'=> $value->health_status, 'organization'=> $value->organization] );
+         // print_r($value->id);dd();
+        $update = \App\CotentBatch::where('id', '=', $value->id)->update(['validation'=> $value->validation, 'disposition'=> $value->disposition, 'health_status'=> $value->health_status, 'company_name'=> $value->company_name] );
         }
         \App\BatchDetail::where('id', '=', $id)->update(['status_id' => 4]);
 

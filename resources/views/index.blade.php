@@ -133,7 +133,8 @@
 
                                                   @if($data->batchStatus->status == 'Completed')
                                                    
-                                                    <p><a href="{{url('download-csv', $data->id)}}">Download as Csv</a></p>
+ <a href="{{url('download-csv', $data->id)}}" class="green" title="Download">
+                                           <i class="ace-icon glyphicon glyphicon-cloud-download bigger-130"></i></a> 
                                                  @endif      
                                                          </a>                                                     
 
@@ -323,9 +324,7 @@ $(".cross").click(function(){
 <script >
    jQuery(function($) {
         var oTable1 = 
-        $('#sample-table-3')
-        //.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
-        .dataTable( {
+        $('#sample-table-3').dataTable( {
           bAutoWidth: false,
           "aaSorting": [],
          

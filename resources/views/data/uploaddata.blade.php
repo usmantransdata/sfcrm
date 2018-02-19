@@ -1,6 +1,5 @@
 <!DOCTYPE html>
   @include('layouts.header')
-  @include('layouts.sidebar')
 
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
@@ -10,26 +9,54 @@
             <script type="text/javascript">
               try{ace.settings.check('main-container' , 'fixed')}catch(e){}
             </script>
+                   <div id="sidebar" class="sidebar      h-sidebar                navbar-collapse collapse">
+                 <script type="text/javascript">
+                   try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+                 </script>
+
+                         <ul class="nav nav-list">
+                           <li class="hover">
+                             <a href="{{route('viewData')}}">
+                               <i class="menu-icon fa fa-tachometer"></i>
+                               <span class="menu-text"> Dashboard </span>
+                             </a>
+
+                             <b class="arrow"></b>
+                           </li>
+
+                           <li class="active open hover">
+                             <a href="{{route('data_upload')}}">
+                                <i class="menu-icon fa fa-cog"></i>
+                               <span class="menu-text"> Upload Data </span>
+
+                               <b class="arrow fa fa-angle-down"></b>
+                             </a>
+                           </li>
+                         </ul>
+                       </li>
+                     </ul>
+                   </li>
+                   </li>
+            </ul><!-- /.nav-list -->
+
+                 <!-- #section:basics/sidebar.layout.minimize -->
+                 <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+                   <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+                 </div>
+                   <!-- /section:basics/sidebar.layout.minimize -->
+                 <script type="text/javascript">
+                   try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+                 </script>
+               </div>
               <div class="page-content">
                 <div class="page-content-area">
-                	
-                  <div class="page-header">
-                    <h1>
-								New Batch Management 
-								
-							</h1>
-						</div><!-- /.page-header -->
-
 						<div class="row">
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
-								
-
-								<div class="hr hr-18 hr-double dotted"></div>
-
+							
 								<div class="widget-box">
-									<div class="widget-header widget-header-blue widget-header-flat">
-										<h4 class="widget-title lighter">Client upload CSV</h4>
+									<div class="widget-header widget-header-blue widget-header-flat" >
+										<h4 class="widget-title darker">Client upload CSV</h4>
 
 										
 									</div>
@@ -70,14 +97,22 @@
 
 											<hr />
 
+	{!! Form::open(
+    array(
+        'route' => 'import_process', 
+        'class' => 'form-horizontal', 
+        'id' => 'validation-form',
+
+        'novalidate' => 'novalidate', 
+        'files' => true)) !!}
+									
 											<!-- #section:plugins/fuelux.wizard.container -->
 											<div class="step-content pos-rel" id="step-container">
 												<div class="step-pane active" id="step1">
 													<h3 class="lighter block green">Enter the following information</h3>
 
-													
+											
 
-											<form class="form-horizontal" id="validation-form" method="get">
 												<div class="form-group">
 									            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="name">Batch Name</label>
 									            <div class="col-xs-12 col-sm-9">
@@ -111,7 +146,7 @@
 
 												<div class="step-pane" id="step2">
 													<div>
-														
+														<input  type="file" id="filename" name="filename" />
 														<div class="widget-box">
 												<div class="widget-header">
 													<h4 class="widget-title">Custom File Input</h4>
@@ -129,23 +164,24 @@
 
 												<div class="widget-body">
 													<div class="widget-main">
-														<div class="form-group">
+														<!-- <div class="form-group">
 															<div class="col-xs-12">
-																<!-- #section:custom/file-input -->
+															
 																<input type="file" id="id-input-file-2" />
 															</div>
-														</div>
+														</div> -->
 
 														<div class="form-group">
 															<div class="col-xs-12">
-																<input multiple="" type="file" id="id-input-file-3" />
+																<input type="hidden" name="csvfile"  class="csvfile">
+																<input multiple="" type="file" id="id-input-file-3" name="filename" />
 
 																<!-- /section:custom/file-input -->
 															</div>
 														</div>
 
 														<!-- #section:custom/file-input.filter -->
-														 <a onclick="ExportToTable()" class="btn btn-primary btn-xs previewbtn">Preview File</a>
+														 <!-- <a onclick="ExportToTable()" class="btn btn-primary btn-xs previewbtn">Preview File</a> -->
 														<label>
 															<input type="checkbox" checked="checked" name="file-format" id="id-file-format" class="ace" />
 															<span class="lbl"> Allow only CSV</span>
@@ -189,9 +225,9 @@
                                  <p class""><b>Total Count: </b><span class="totalcounts"></span></p>
                                  <p class="text-primary"><b>Are you sure you want to upload this batch ?</b></p>
                                  <p>
-                                 <button type="submit" class="btn btn-success">
+                               <!--   <button type="submit" class="btn btn-success">
 							        Finish
-							    </button>	
+							    </button>	 -->
 							     <a href="{{url('viewData')}}" class="btn btn-danger">
 							        Cancel
 							    </a>
@@ -199,8 +235,9 @@
                                  </p>
 													</div>
 												</div>
-											</div>
 
+											</div>
+ 										</form>
 											<!-- /section:plugins/fuelux.wizard.container -->
 											<hr />
 											<div class="wizard-actions">
@@ -217,7 +254,7 @@
 
 												<!-- /section:plugins/fuelux.wizard.buttons -->
 											</div>
-                                           </form>
+                                          
 											<!-- /section:plugins/fuelux.wizard -->
 										</div><!-- /.widget-main -->
 									</div><!-- /.widget-body -->
@@ -230,8 +267,6 @@
 					</div><!-- /.page-content-area -->
 				</div><!-- /.page-content -->
 			</div><!-- /.main-content -->
-
-
 @include('layouts.footer')
 	
 
@@ -258,7 +293,7 @@
    function ExportToTable() {  
        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;  
        //Checks whether the file is a valid csv file  
-       if (regex.test($("#id-input-file-3").val().toLowerCase())) {  
+       if (regex.test($("#filename").val().toLowerCase())) {  
            //Checks whether the browser supports HTML5  
            if (typeof (FileReader) != "undefined") {  
                var reader = new FileReader();  
@@ -289,7 +324,7 @@
                    
                }  
               //reader.readAsText($("#csvfile").item(0));
-              reader.readAsText($("#id-input-file-3")[0].files[0]);  
+              reader.readAsText($("#filename")[0].files[0]);  
            }  
            else {  
                alert("Sorry! Your browser does not support HTML5!");  
@@ -434,6 +469,10 @@
                       ExportToTable();
 
 					}
+					if(info.step == 5 ) {
+                     alert("last step");
+
+					}
 					if(info.step == 3 ) {
 					
 
@@ -449,6 +488,7 @@
                              $('.totalcounts').html(totalcounts);
                              $('.due_date').html($("#id-date-picker-1").val());
                              $('.batchname').html($("#batch_name").val());
+                             $('.csvfile').html($("#batch_name").val());
                              
                              
 
@@ -470,7 +510,35 @@
 					}
 				})
 				.on('finished', function(e) {
+					//alert();
+					url = '{{route("import_process")}}';
+			            //console.log(url);
+			            $.ajax({
+			                url: url,
+			                datatype: 'html',
+			                
+			                data: $('#validation-form').serialize(),
+			                type: "POST",
+			                
+			                success : function(response){
+                             alert("data saved successfully!");
+                             
+                             
+
+
+			                   //alert(response);
+			                    //alert(aaa);
+			                },
+			                error : function(res){
+			                	//alert(res);
+			                 // console.log(res);
+			                }
+
+			            });
+			           return false; 
+					/*$( "#validation-form" ).submit();*/
 					bootbox.dialog({
+
 						message: "Thank you! Your information was successfully saved!", 
 						buttons: {
 							"success" : {
@@ -508,8 +576,6 @@
 						$('#sample-form').hide();
 					}
 				})
-			
-			
 			
 				//documentation : http://docs.jquery.com/Plugins/Validation/validate
 			
@@ -594,7 +660,9 @@
 					$(this).closest('form').validate().element($(this));
 				});
 				*/
-			})
+			});
+
+
 		</script>
 
 </html>

@@ -44,6 +44,35 @@
                 try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
               </script>
             </div>
+            @else
+
+                   <div id="sidebar" class="sidebar      h-sidebar                navbar-collapse collapse">
+                 <script type="text/javascript">
+                   try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+                 </script>
+
+                         <ul class="nav nav-list">
+                           <li class="active hover">
+                             <a href="{{route('viewData')}}">
+                               <i class="menu-icon fa fa-tachometer"></i>
+                               <span class="menu-text"> Dashboard </span>
+                             </a>
+
+                             <b class="arrow"></b>
+                           </li>
+                                             
+            </ul><!-- /.nav-list -->
+
+                 <!-- #section:basics/sidebar.layout.minimize -->
+                 <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+                   <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+                 </div>
+                   <!-- /section:basics/sidebar.layout.minimize -->
+                 <script type="text/javascript">
+                   try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+                 </script>
+               </div>
+
 @endif
               <div class="page-content">
                 <div class="page-content-area">
@@ -147,7 +176,7 @@
                                   <i class="ace-icon fa fa-trash-o bigger-130"></i>
                                 </a>
                          <a href="{{url('download-csv-client', $data->batchs_id)}}" class="green" style="display: {{ $data->status === 'Completed' ? 'inline-block':'none'}}">
-                                      <i class="ace-icon fa fa-file-excel-o bigger-130"></i></a>        
+                                      <i class="ace-icon glyphicon glyphicon-cloud-download bigger-130"></i></a>        
                             </div>    
                               
                               </center>
@@ -195,7 +224,7 @@
 
                                  <td>
                                            <center>
-                                        <a href="{{url('download-csv', $data->id)}}" class="green" title="Download">
+                                        <a href="{{url('download-csv', $data->batchs_id)}}" class="green" title="Download">
                                            <i class="ace-icon glyphicon glyphicon-cloud-download bigger-130"></i></a> 
                                           
                                         </center>
@@ -268,7 +297,7 @@
                             <td>{{$data->due_date}}</td>
                             <td>
                                            <center>
-                                        <a href="{{url('download-csv', $data->id)}}" class="green">
+                                        <a href="{{url('download-csv', $data->batchs_id)}}" class="green">
                                            <i class="ace-icon glyphicon glyphicon-cloud-download bigger-130"></i></a> 
                                           
                                         </center>
@@ -300,6 +329,7 @@
                                                                   </td> 
 
                                    <td>
+                                    <center>
               <a href="#" style="display: {{ $data->status === 'Submited' ? 'inline-block':'none'}}" data-toggle="modal" data-target="#inProcess" data-id="{{$data->batchs_id}}" title="Start Processing">
                                               <i class="ace-icon fa fa-play bigger-130"></i>
                                                
@@ -313,7 +343,8 @@
                <a href="{{route('completedBatch', $data->batchs_id)}}" style="display: {{ $data->status === 'QA-Review' ? 'inline-block':'none'}}"  title="Complete the batch" class="green">
                                                <i class="ace-icon glyphicon glyphicon-saved bigger-130"></i>
                                                 
-                                             </a>                                                                 
+                                             </a>                               
+                                             </center>
                                    </td>                               
                               </tr>
                               @endif
@@ -613,9 +644,7 @@ $(".cross").click(function(){
 <script >
    jQuery(function($) {
         var oTable1 = 
-        $('#sample-table-3')
-        //.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
-        .dataTable( {
+        $('#sample-table-3').dataTable( {
           bAutoWidth: false,
           "aaSorting": [],
          

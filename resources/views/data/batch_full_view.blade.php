@@ -7,14 +7,48 @@
             <script type="text/javascript">
               try{ace.settings.check('main-container' , 'fixed')}catch(e){}
             </script>
-            
-              <div class="page-content">
-                <div class="page-header">
+                              <div id="sidebar" class="sidebar      h-sidebar                navbar-collapse collapse">
+                            <script type="text/javascript">
+                              try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+                            </script>
+
+                                    <ul class="nav nav-list">
+                                      <li class="active hover">
+                                        <a href="{{route('viewData')}}">
+                                          <i class="menu-icon fa fa-tachometer"></i>
+                                          <span class="menu-text"> Dashboard </span>
+                                        </a>
+
+                                        <b class="arrow"></b>
+                                      </li>
+
+                                      <li class="open hover">
+                                        <a href="{{route('data_upload')}}">
+                                           <i class="menu-icon fa fa-cog"></i>
+                                          <span class="menu-text"> Upload Data </span>
+
+                                          <b class="arrow fa fa-angle-down"></b>
+                                        </a>
+                                      </li>
+                                                        
+                       </ul><!-- /.nav-list -->
+
+                            <!-- #section:basics/sidebar.layout.minimize -->
+                            <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+                              <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+                            </div>
+                              <!-- /section:basics/sidebar.layout.minimize -->
+                            <script type="text/javascript">
+                              try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+                            </script>
+                          </div>
+           
+
+                <!-- <div class="page-header">
                   <a href="{{ URL::previous() }}">
                   <i class="fa fa-arrow-left bigger-200" aria-hidden="true"></i>
                   </a>
-                </div>
-                <div class="page-content-area">
+                </div> -->
                    @if (session('flash_message'))
                       <div class="alert alert-success">
                           {{ session('flash_message') }}
@@ -25,10 +59,13 @@
               <div class="page-content-area">
                     <div class="row">
                       <div class="col-xs-12">
-                         <form method="post" action="">
-                            {{csrf_field()}}
-                            <div class="row">
-                       <div>
+               <!--           <form method="post" action="">
+                            {{csrf_field()}} -->
+                   <div class="panel panel-primary" >
+                       
+            <div class="panel-heading "><h4>Batch View</h4></div>
+            <div class="panel-body">
+
                         <table id="sample-table-3" class="table table-striped table-bordered table-hover" style="overflow-y: scroll;height: 100%;display: block;
     width: 100%;overflow-x: scroll;">
                            <thead>
@@ -93,10 +130,7 @@
                          @endforeach    
                       </tbody>
 
-                      </table>
-
-
-                       
+                      </table>                       
                   </div>
                   </div><!-- /.span -->
                 </form>
@@ -108,8 +142,7 @@
         </div><!-- /.page-content -->
       </div><!-- /.main-content -->
        </div><!-- /.page-content-area -->
-              </div><!-- /.page-content -->
-            </div><!-- /.main-content -->
+             
 
           
 
