@@ -117,6 +117,30 @@ class ClientController extends Controller
       
       
     }
+    public  function get_contentbatch_columns(Request $request){
+      $input = $request->all(); 
+      //print_r($input['csvcolumns']);
+      $contentbatch = new CotentBatch;
+      $content_batch_colums = $contentbatch->getTableColumns();
+      //print_r($content_batch_colums);
+      $returndata='';
+      foreach ($content_batch_colums as $key => $value)
+      {
+        if($value!='id' && $value!='batch_id' && $value!='address3' && $value!='health_status' && $value!='disposition' && $value!='validation' && $value!='created_date' && $value!='updated_date')
+          {
+          $returndata.="<tr><td>".ucfirst(str_replace('_', ' ', $value)).":</td><td>";
+          $returndata.= '<select name="'. $value.'">';
+            foreach ($input['csvcolumns'] as $db_field)
+            {
+            $returndata.='<option value="'. $db_field.'">'. $db_field.'</option>';
+            }
+          $returndata.="</select></td></tr>";
+          }
+      }
+     
+      return$returndata;
+      //return $tablecolums = $contentbatch->getTableColumns(); 
+    }
     public function readcsv(Request $request)
     {
     

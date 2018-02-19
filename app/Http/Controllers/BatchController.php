@@ -33,7 +33,8 @@ class BatchController extends Controller
          // print_r(Auth::user()->role_id);dd();
             if(Auth::user()->role_id == 5){
                    $company = Client::where('contact_person_email', '=', Auth::user()->email)->first();
-       return view('data.upload', compact('company'));
+       //return view('data.upload', compact('company'));
+       return view('data.uploaddata', compact('company'));
              }
                 else{
                   return redirect()->back();
