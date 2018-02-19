@@ -148,7 +148,7 @@
 														 <a onclick="ExportToTable()" class="btn btn-primary btn-xs previewbtn">Preview File</a>
 														<label>
 															<input type="checkbox" checked="checked" name="file-format" id="id-file-format" class="ace" />
-															<span class="lbl"> Allow only images</span>
+															<span class="lbl"> Allow only CSV</span>
 														</label>
 
 														<!-- /section:custom/file-input.filter -->
@@ -174,14 +174,29 @@
 
 												<div class="step-pane" id="step4">
 													<div class="center">
-														<h3 class="green">Congrats!</h3>
-														Your product is ready to ship! Click finish to continue!
+														<h3 class="green">Match Fields!</h3>
+														<div >
+															<table class="matchfields_data"></table>
+
+														</div>
 													</div>
 												</div>
-												<div class="step-pane" id="step4">
+												<div class="step-pane" id="step5">
 													<div class="center">
-														<h3 class="green">match Fields</h3>
-														Your product is ready to ship! Click finish to continue!
+														<h3 class="green">Match Fields</h3>
+														<p class""><b>Batch Name: </b><span class="batchname"></span></p>
+                                 <p class""><b>Proposed Due Date: </b><span class="due_date"></span></p>
+                                 <p class""><b>Total Count: </b><span class="totalcounts"></span></p>
+                                 <p class="text-primary"><b>Are you sure you want to upload this batch ?</b></p>
+                                 <p>
+                                 <button type="submit" class="btn btn-success">
+							        Finish
+							    </button>	
+							     <a href="{{url('viewData')}}" class="btn btn-danger">
+							        Cancel
+							    </a>
+
+                                 </p>
 													</div>
 												</div>
 											</div>
@@ -238,6 +253,8 @@
 		<!-- inline scripts related to this page -->
 
 <script type="text/javascript">  
+	var tmparr=[];
+	var totalcounts=0;
    function ExportToTable() {  
        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;  
        //Checks whether the file is a valid csv file  
@@ -256,13 +273,20 @@
                            //Looping through each cell in a csv row  
                            for (var j = 0; j < csvcols.length; j++) {  
                                var cols = "<td>" + csvcols[j] + "</td>";  
+                               if(i==0)
+                               {
+                               tmparr.push(csvcols[j]);	
+                               }
                                row += cols;  
                            }  
                            row += "</tr>";  
                            table.append(row);  
-                       }  
+                       }
+                       totalcounts++;
+
                    }  
                    $('#exceltable').show();  
+                   
                }  
               //reader.readAsText($("#csvfile").item(0));
               reader.readAsText($("#id-input-file-3")[0].files[0]);  
@@ -411,25 +435,30 @@
 
 					}
 					if(info.step == 3 ) {
-                      var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;  
-       //Checks whether the file is a valid csv file  
-                       regex.test($("#id-input-file-3").val());  
-						//alert();
+					
 
                       url = '{{route("getconttentbatch")}}';
-			            console.log(url);
+			            //console.log(url);
 			            $.ajax({
 			                url: url,
-			                data: {"_token": "{{ csrf_token() }}", "filename":$("#id-input-file-3").val()},
+			                data: {"_token": "{{ csrf_token() }}", "csvcolumns":tmparr},
 			                type: "POST",
-			                dataType: "json",
+			                
 			                success : function(response){
+                             $('.matchfields_data').html(response);
+                             $('.totalcounts').html(totalcounts);
+                             $('.due_date').html($("#id-date-picker-1").val());
+                             $('.batchname').html($("#batch_name").val());
+                             
+                             
 
-			                    alert(response);
-			                    alert(aaa);
+
+			                   //alert(response);
+			                    //alert(aaa);
 			                },
 			                error : function(res){
-			console.log(res);
+			                	alert(res);
+			                 console.log(res);
 			                }
 
 			            });
