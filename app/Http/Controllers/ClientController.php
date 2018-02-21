@@ -43,7 +43,17 @@ class ClientController extends Controller
                 }
       }
     }
-
+    public function importcsv(Request $request)
+        {
+         
+        $supplier_name = $request->supplier_name;
+        $extension = $request->file('file');
+        $extension = $request->file('file')->getClientOriginalExtension(); // getting excel extension
+        $dir = 'storage/app/csvfiles/';
+        $filename = uniqid().'_'.time().'_'.date('Ymd').'.'.$extension;
+        $request->file('file')->move($dir, $filename);
+        return $filename;
+        }
     /**
      * Store a newly created resource in storage.
      *
@@ -55,9 +65,8 @@ class ClientController extends Controller
       $input = $request->all(); 
       //echo "ass";
      //echo 
-      print_r($request->file('filename'));
-       dd($input);
-       $path = "storage/app/".$input['filename'];
+      
+       $path = "storage/app/csvfiles/".$input['csvdatafile'];
        $data = Excel::load($path, function($reader) {})->get()->toArray();
        $id = Auth::user()->id; 
                 
@@ -71,6 +80,7 @@ class ClientController extends Controller
                // $batch_detail->total_record_count = count();
               //  dd($batch_detail);
                $batch_detail->save();
+           
                $cols = array();
                $count = 0; 
                //echo "<pre>";
@@ -79,32 +89,32 @@ class ClientController extends Controller
                //echo $input['firstname'];
                echo $batch_detail->id;
                //dd();
-              
+             // print_r($data[0]['first_name']);//dd();
 
                foreach ($data as $key => $value) {
                    // print_r($row);dd();
                    /*foreach ($row as $value) {*/
-                   // print_r($value);dd();
+                    
                     $count++;
                     //$firstname=$value[];
                     $cols['batch_id'] = $batch_detail->id;
-                    $cols['first_name'] =$value[$input['first_name']];
-                    $cols['last_name'] =$value[$input['last_name']];
-                     $cols['title'] =$value[$input['title']];
-                    $cols['company_name'] =$value[$input['company_name']];
-                    $cols['email1'] =$value[$input['email1']];
-                    $cols['email2'] =$value[$input['email2']];
-                    $cols['email3'] =$value[$input['email3']];
-                    $cols['phone_number1'] =$value[$input['phone_number1']];
-                    $cols['phone_number2'] =$value[$input['phone_number2']];
-                    $cols['phone_number3'] =$value[$input['phone_number3']];
-                    $cols['address1'] =$value[$input['address1']];
-                    $cols['address2'] =$value[$input['address2']];
-                    //$cols['address3'] =$value[$input['address3']];
-                    $cols['city'] =$value[$input['city']];
-                    $cols['state'] =$value[$input['state']];
-                    $cols['zip'] =$value[$input['zip']];
-                    $cols['country'] =$value[$input['country']];
+                    $cols['first_name'] =$value[strtolower(str_replace(" ","_",$input['first_name']))];
+                    $cols['last_name'] =$value[strtolower(str_replace(" ","_",$input['last_name']))];
+                     $cols['title'] =$value[strtolower(str_replace(" ","_",$input['title']))];
+                    $cols['company_name'] =$value[strtolower(str_replace(" ","_",$input['company_name']))];
+                    $cols['email1'] =$value[strtolower(str_replace(" ","_",$input['email1']))];
+                    $cols['email2'] =$value[strtolower(str_replace(" ","_",$input['email2']))];
+                    $cols['email3'] =$value[strtolower(str_replace(" ","_",$input['email3']))];
+                    $cols['phone_number1'] =$value[strtolower(str_replace(" ","_",$input['phone_number1']))];
+                    $cols['phone_number2'] =$value[strtolower(str_replace(" ","_",$input['phone_number2']))];
+                    $cols['phone_number3'] =$value[strtolower(str_replace(" ","_",$input['phone_number3']))];
+                    $cols['address1'] =$value[strtolower(str_replace(" ","_",$input['address1']))];
+                    $cols['address2'] =$value[strtolower(str_replace(" ","_",$input['address2']))];
+                    //$cols['address3'] =$value[$input['address3']))];
+                    $cols['city'] =$value[strtolower(str_replace(" ","_",$input['city']))];
+                    $cols['state'] =$value[strtolower(str_replace(" ","_",$input['state']))];
+                    $cols['zip'] =$value[strtolower(str_replace(" ","_",$input['zip']))];
+                    $cols['country'] =$value[strtolower(str_replace(" ","_",$input['country']))];
                     $cols['disposition'] ='';
                     $cols['validation'] ='';
                     $cols['health_status'] ='';
@@ -113,6 +123,8 @@ class ClientController extends Controller
                    
                   
                 }
+        //         print_r($input);
+      //dd();   
                 BatchDetail::where('id', $batch_detail->id)->update(array('total_record_count' => $count));
                 
                 return "You successfully added new batch order!";

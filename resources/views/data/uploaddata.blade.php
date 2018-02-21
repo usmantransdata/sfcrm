@@ -3,6 +3,7 @@
 
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
+ <meta name="_token" content="{{ csrf_token() }}" />
 					<!-- /section:settings.box -->
 	 <body class="no-skin">
           <div class="main-container" id="main-container">
@@ -102,6 +103,7 @@
         'route' => 'import_process', 
         'class' => 'form-horizontal', 
         'id' => 'validation-form',
+        'onsubmit'=>'getPath()',
 
         'novalidate' => 'novalidate', 
         'files' => true)) !!}
@@ -117,6 +119,7 @@
 									            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="name">Batch Name</label>
 									            <div class="col-xs-12 col-sm-9">
 												<div class="clearfix">
+													<input type="hidden" name="company" value="{{$company->id}}">
 									            <input  maxlength="100" type="text" class="col-xs-12 col-sm-5" id="batch_name" required="required" name="batch_name" placeholder="Enter Batch Name"  />
 									            </div></div>
 									          </div>
@@ -146,8 +149,8 @@
 
 												<div class="step-pane" id="step2">
 													<div>
-														<input  type="file" id="filename" name="filename" />
-														<div class="widget-box">
+
+                                                    <div class="widget-box">
 												<div class="widget-header">
 													<h4 class="widget-title">Custom File Input</h4>
 
@@ -164,35 +167,26 @@
 
 												<div class="widget-body">
 													<div class="widget-main">
-														<!-- <div class="form-group">
-															<div class="col-xs-12">
-															
-																<input type="file" id="id-input-file-2" />
-															</div>
-														</div> -->
-
 														<div class="form-group">
 															<div class="col-xs-12">
-																<input type="hidden" name="csvfile"  class="csvfile">
-																<input multiple="" type="file" id="id-input-file-3" name="filename" />
-
-																<!-- /section:custom/file-input -->
+																<!-- #section:custom/file-input -->
+																<label class="ace-file-input">
+																	<input required="" type="file" name="result_file" id="result_file" />
+																	<span class="ace-file-container " data-title="Change" style="display: none;"><span class="ace-file-name"><i class=" ace-icon fa fa-file"></i></span></span><a class="remove" href="#"><i class=" ace-icon fa fa-times"></i></a></label>
 															</div>
 														</div>
 
-														<!-- #section:custom/file-input.filter -->
-														 <!-- <a onclick="ExportToTable()" class="btn btn-primary btn-xs previewbtn">Preview File</a> -->
-														<label>
-															<input type="checkbox" checked="checked" name="file-format" id="id-file-format" class="ace" />
-															<span class="lbl"> Allow only CSV</span>
-														</label>
-
-														<!-- /section:custom/file-input.filter -->
-
+														
 													</div>
-													
 												</div>
 											</div>
+
+
+														
+														<input type="hidden"  id="csvdatafile" name="csvdatafile" value="" />
+														
+														<input type="hidden"  id="csvdata" name="csvdata" value="" />
+														<input type="hidden"  id="csvcols" name="csvcols" value="" />
 													</div>
 												</div>
 
@@ -289,11 +283,13 @@
 
 <script type="text/javascript">  
 	var tmparr=[];
+	var csvdata=[];
 	var totalcounts=0;
+	var lines = [];
    function ExportToTable() {  
        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;  
        //Checks whether the file is a valid csv file  
-       if (regex.test($("#filename").val().toLowerCase())) {  
+       if (regex.test($("#result_file").val().toLowerCase())) {  
            //Checks whether the browser supports HTML5  
            if (typeof (FileReader) != "undefined") {  
                var reader = new FileReader();  
@@ -301,30 +297,43 @@
                    var table = $("#exceltable > tbody");  
                    //Splitting of Rows in the csv file  
                    var csvrows = e.target.result.split("\n");  
+                   
                    for (var i = 0; i < csvrows.length; i++) {  
                        if (csvrows[i] != "") {  
                            var row = "<tr>";  
                            var csvcols = csvrows[i].split(",");  
+                           var tarr = [];
                            //Looping through each cell in a csv row  
                            for (var j = 0; j < csvcols.length; j++) {  
                                var cols = "<td>" + csvcols[j] + "</td>";  
+                               csvdata[i]=csvcols[j];	
+                               
                                if(i==0)
                                {
                                tmparr.push(csvcols[j]);	
                                }
+                               else{
+                               	tarr.push(csvcols[j]);
+                               }
                                row += cols;  
-                           }  
+                           } 
+                          lines.push(tarr); 
+                          
                            row += "</tr>";  
                            table.append(row);  
                        }
                        totalcounts++;
 
-                   }  
+
+                   }
+                   csvdata=lines;
+                  // console.log(lines);  
+                  // $("#csvdata").val(lines);
                    $('#exceltable').show();  
                    
                }  
               //reader.readAsText($("#csvfile").item(0));
-              reader.readAsText($("#filename")[0].files[0]);  
+              reader.readAsText($("#result_file")[0].files[0]);  
            }  
            else {  
                alert("Sorry! Your browser does not support HTML5!");  
@@ -356,7 +365,7 @@
 				$(".input-mask-product").mask("a*-999-a999",{placeholder:" ",completed:function(){alert("You typed the following: "+this.val());}});
 			
 			
-				$('#id-input-file-1 , #id-input-file-2').ace_file_input({
+				$('#result_file , #id-input-file-2').ace_file_input({
 					no_file:'No File ...',
 					btn_choose:'Choose',
 					btn_change:'Change',
@@ -466,11 +475,53 @@
 				})
 				.on('change' , function(e, info){
 					if(info.step == 2 ) {
-                      ExportToTable();
+
+					//e.preventDefault();
+				    var extension = $('#result_file').val().split('.').pop().toLowerCase();
+				    if ($.inArray(extension, ['csv']) == -1) {
+				        $('#errormessage').html('Please Select Valid File... ');
+				    } else {
+
+				        var file_data = $('#result_file').prop('files')[0];
+				        var supplier_name = $('#supplier_name').val();
+				        var form_data = new FormData();
+				        form_data.append('file', file_data);
+				        form_data.append('supplier_name', supplier_name);
+				        $.ajaxSetup({
+				            headers: {
+				                'X-CSRF-Token': $('meta[name=_token]').attr('content')
+				            }
+				        });
+        				$.ajaxSetup({
+
+			            	        headers: {
+
+			            	            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+
+			            	        }
+
+			            	    });
+				        $.ajax({
+				            url: "{{url('storecsvfile')}}", // point to server-side PHP script
+				            data: form_data,
+				            type: 'POST',
+				            contentType: false, // The content type used when sending data to the server.
+				            cache: false, // To unable request pages to be cached
+				            processData: false,
+				            success: function(data) {
+				            	$("#csvdatafile").val(data);
+				            	ExportToTable();
+				            	//exit();
+				            	//alert(data);
+
+				            }
+				        });
+				    }	
+                      
 
 					}
 					if(info.step == 5 ) {
-                     alert("last step");
+                     //alert("last step");
 
 					}
 					if(info.step == 3 ) {
@@ -488,7 +539,7 @@
                              $('.totalcounts').html(totalcounts);
                              $('.due_date').html($("#id-date-picker-1").val());
                              $('.batchname').html($("#batch_name").val());
-                             $('.csvfile').html($("#batch_name").val());
+                             //$('.csvfile').html($("#batch_name").val());
                              
                              
 
@@ -510,14 +561,26 @@
 					}
 				})
 				.on('finished', function(e) {
-					//alert();
+					
+					//$("#csvdata").val(lines);
+					$("#csvcols").val(tmparr);
 					url = '{{route("import_process")}}';
 			            //console.log(url);
+			            	$.ajaxSetup({
+
+			            	        headers: {
+
+			            	            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+
+			            	        }
+
+			            	    });
+
+
 			            $.ajax({
 			                url: url,
-			                datatype: 'html',
-			                
-			                data: $('#validation-form').serialize(),
+			                                
+			                data:$('#validation-form').serialize(),
 			                type: "POST",
 			                
 			                success : function(response){
@@ -529,9 +592,10 @@
 			                   //alert(response);
 			                    //alert(aaa);
 			                },
+			               
 			                error : function(res){
-			                	//alert(res);
-			                 // console.log(res);
+			                	alert(res);
+			                  console.log(res);
 			                }
 
 			            });
@@ -664,6 +728,7 @@
 
 
 		</script>
+		
 
 </html>
 

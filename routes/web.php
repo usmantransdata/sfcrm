@@ -28,8 +28,12 @@ Route::post('userActivate', 'AdminController@userActivate')->name('userActivate'
 
 
 Route::post('import_parse', 'ClientController@parseImport')->name('import_parse');
-Route::post('import_process', 'ClientController@importcsv')->name('import_process');
+Route::post('import_process', 'ClientController@processImport')->name('import_process');
 Route::post('getconttentbatch', 'ClientController@get_contentbatch_columns')->name('getconttentbatch');
+Route::post('storecsvfile', [
+    'as' => 'storecsvfile',
+    'uses' => 'ClientController@importcsv'
+]);
 
 
 Route::post('user_signup', 'AdminController@signup')->name('user_signup');
